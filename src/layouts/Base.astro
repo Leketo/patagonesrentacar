@@ -1,73 +1,118 @@
 ---
-import '@fontsource/barlow/400.css';
-import '@fontsource/barlow/500.css';
-import '@fontsource/barlow/600.css';
-import '@fontsource/barlow-condensed/600.css';
-import '@fontsource/barlow-condensed/700.css';
+// Solo el subconjunto latino y solo los cuatro pesos que el sitio usa:
+// Barlow 400/500/600 para texto y Barlow Condensed 700 para titulares.
+import '@fontsource/barlow/latin-400.css';
+import '@fontsource/barlow/latin-500.css';
+import '@fontsource/barlow/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
 import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+
+import Cabecera from '../components/Cabecera.astro';
+import Pie from '../components/Pie.astro';
 import { site } from '../data/site';
+import { fleet } from '../data/fleet';
+import portada from '../assets/portada/puerto-natales-subaru.jpg';
 
 interface Props {
   title: string;
   description: string;
+  /** Imagen para redes. Por defecto, el Subaru en la costanera de Puerto Natales. */
   image?: string;
+  imageAlt?: string;
   noindex?: boolean;
+  /** Datos estructurados extra de la página (preguntas, migas, auto). */
+  schema?: unknown[];
 }
 
-const { title, description, image = '/images/flota/subaru-xv.jpg', noindex = false } = Astro.props;
-const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
-const ogImage = new URL(image, Astro.site).toString();
+const {
+  title,
+  description,
+  image,
+  imageAlt = 'Subaru XV de Patagones Rent a Car en la costanera de Puerto Natales, con la cordillera al fondo',
+  noindex = false,
+  schema = [],
+} = Astro.props;
 
-const jsonLd = {
+const tituloCompleto = title.includes(site.name) ? title : `${title} | ${site.name}`;
+const canonica = new URL(Astro.url.pathname, Astro.site).toString();
+const imagenRedes = new URL(image ?? portada.src, Astro.site).toString();
+
+// El negocio. Se declara una vez y se repite en todas las páginas: es el mismo.
+const negocio = {
   '@context': 'https://schema.org',
   '@type': 'AutoRental',
+  '@id': `${site.url}/#negocio`,
   name: site.name,
+  description: `Arriendo de autos en ${site.city}, ${site.region}, Chile, para viajar al Parque Nacional Torres del Paine.`,
   url: site.url,
   telephone: site.phoneDisplay,
-  image: new URL('/images/flota/subaru-xv.jpg', Astro.site).toString(),
+  image: new URL(portada.src, Astro.site).toString(),
   slogan: site.slogan,
   openingHours: site.openingHours,
   priceRange: '$$',
+  currenciesAccepted: 'CLP',
   address: {
     '@type': 'PostalAddress',
     addressLocality: site.city,
     addressRegion: site.region,
     addressCountry: 'CL',
   },
-  areaServed: ['Puerto Natales', 'Parque Nacional Torres del Paine'],
+  areaServed: [
+    { '@type': 'City', name: 'Puerto Natales' },
+    { '@type': 'Place', name: 'Parque Nacional Torres del Paine' },
+  ],
+  // Los cuatro autos con su precio: el mismo dato que ve el visitante.
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Flota',
+    itemListElement: fleet.map((car) => ({
+      '@type': 'Offer',
+      name: `${car.name} ${car.year}`,
+      price: car.price,
+      priceCurrency: 'CLP',
+      url: `${site.url}/flota/${car.slug}/`,
+      availability: 'https://schema.org/InStock',
+      itemOffered: {
+        '@type': 'Car',
+        name: `${car.name} ${car.year}`,
+        vehicleTransmission: car.transmission,
+        vehicleSeatingCapacity: car.seats,
+      },
+    })),
+  },
 };
+
+const datos = [negocio, ...schema];
 ---
 <!doctype html>
 <html lang="es-CL">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{fullTitle}</title>
+    <title>{tituloCompleto}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonica} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0E1A22" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={fullTitle} />
+    <meta property="og:title" content={tituloCompleto} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagenRedes} />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {datos.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
   </head>
   <body>
-    <Header />
+    <Cabecera />
     <main id="contenido">
       <slot />
     </main>
-    <Footer />
+    <Pie />
   </body>
 </html>

@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import type { Car } from '../data/fleet';
+import { badge } from '../data/fleet';
+import { clp, routesForCar, widthsUpTo } from '../lib/format';
+
+interface Props {
+  car: Car;
+  /** h2 en la página de flota, h3 cuando la tarjeta cuelga de otra sección. */
+  nivel?: 'h2' | 'h3';
+}
+const { car, nivel = 'h3' } = Astro.props;
+const Nombre = nivel;
+const href = `/flota/${car.slug}/`;
+const distintivo = badge(car);
+const rutas = routesForCar(car.slug);
+---
+<article class="auto">
+  <div class="auto__marco">
+    <Image
+      src={car.photo}
+      alt={car.photoAlt}
+      widths={widthsUpTo(car.photo.width, [420, 760])}
+      sizes="(min-width: 1100px) 280px, (min-width: 700px) 45vw, 92vw"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+
+  <div class="auto__cuerpo">
+    <p class="auto__precio">
+      <span class="auto__cifra">{clp(car.price)}</span>
+      <span class="auto__unidad">por día</span>
+    </p>
+
+    <Nombre class="auto__nombre">
+      <a href={href}>{car.name} {car.year}</a>
+    </Nombre>
+
+    <p class="auto__datos">{car.type} · {car.seats} pasajeros · {car.transmission}</p>
+
+    {distintivo && <span class="distintivo">{distintivo}</span>}
+
+    {
+      rutas.length > 0 && (
+        <p class="auto__ruta">
+          Lo recomendamos para
+          <strong>{rutas.map((r) => r.name).join(' · ')}</strong>
+        </p>
+      )
+    }
+
+    <a class="boton boton--linea" href={href}>Ver ficha y consultar</a>
+  </div>
+</article>

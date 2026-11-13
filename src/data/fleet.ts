@@ -1,6 +1,11 @@
 // Flota. Precio por día en pesos chilenos, con IVA incluido.
-// Para agregar un auto: copiar un bloque, cambiar los datos y dejar
-// su foto en public/images/flota/.
+// Para agregar un auto: copiar un bloque, cambiar los datos, dejar su foto
+// procesada en src/assets/flota/ e importarla arriba.
+
+import subaruXv from '../assets/flota/subaru-xv.jpg';
+import renaultDuster from '../assets/flota/renault-duster.jpg';
+import suzukiGrandNomade from '../assets/flota/suzuki-grand-nomade.jpg';
+import kiaSorento from '../assets/flota/kia-sorento.jpg';
 
 export interface Car {
   slug: string;
@@ -11,13 +16,11 @@ export interface Car {
   transmission: string;
   /** Precio por día, CLP, IVA incluido. */
   price: number;
-  image: string;
-  imageAlt: string;
-  imageWidth: number;
-  imageHeight: number;
+  /** Foto procesada a 3:2 (salvo la del Duster, ver nota). */
+  photo: ImageMetadata;
+  photoAlt: string;
   /** Para qué viaje conviene, en una línea. */
   bestFor: string;
-  tag: string;
 }
 
 export const fleet: Car[] = [
@@ -29,12 +32,9 @@ export const fleet: Car[] = [
     seats: 5,
     transmission: 'Automática',
     price: 62000,
-    image: '/images/flota/subaru-xv.jpg',
-    imageAlt: 'Subaru XV 2016 de color rojo en Puerto Natales',
-    imageWidth: 1200,
-    imageHeight: 900,
+    photo: subaruXv,
+    photoAlt: 'Subaru XV 2016 rojo, de tres cuartos, en una calle de Puerto Natales',
     bestFor: 'Parejas o familias pequeñas que recorren la ruta y el parque.',
-    tag: 'Ruta y parque',
   },
   {
     slug: 'renault-duster-2019',
@@ -44,12 +44,9 @@ export const fleet: Car[] = [
     seats: 5,
     transmission: 'Automática',
     price: 68000,
-    image: '/images/flota/renault-duster.jpg',
-    imageAlt: 'Renault Duster 2019 de color blanco',
-    imageWidth: 300,
-    imageHeight: 168,
+    photo: renaultDuster,
+    photoAlt: 'Renault Duster 2019 blanco, estacionado al borde de un camino',
     bestFor: 'El modelo más reciente de la flota, para cinco pasajeros.',
-    tag: 'Ruta y parque',
   },
   {
     slug: 'suzuki-grand-nomade-2017',
@@ -59,12 +56,9 @@ export const fleet: Car[] = [
     seats: 5,
     transmission: 'Automática',
     price: 70000,
-    image: '/images/flota/suzuki-grand-nomade.jpg',
-    imageAlt: 'Suzuki Grand Nomade 2017 de color café',
-    imageWidth: 640,
-    imageHeight: 480,
+    photo: suzukiGrandNomade,
+    photoAlt: 'Suzuki Grand Nomade 2017 café, de tres cuartos, sobre gravilla',
     bestFor: 'La 4x4 de la flota: la mejor opción para ripio y Base Torres.',
-    tag: '4x4 · ripio',
   },
   {
     slug: 'kia-sorento-2011',
@@ -74,12 +68,9 @@ export const fleet: Car[] = [
     seats: 7,
     transmission: 'Automática',
     price: 78000,
-    image: '/images/flota/kia-sorento.jpg',
-    imageAlt: 'Kia Sorento 2011 de color plata',
-    imageWidth: 716,
-    imageHeight: 523,
+    photo: kiaSorento,
+    photoAlt: 'Kia Sorento 2011 plata, de perfil, con sus siete asientos',
     bestFor: 'Siete asientos: grupos y familias con equipaje.',
-    tag: '7 pasajeros',
   },
 ];
 
@@ -87,4 +78,17 @@ export const minPrice = Math.min(...fleet.map((c) => c.price));
 
 export function findCar(slug: string): Car | undefined {
   return fleet.find((c) => c.slug === slug);
+}
+
+/**
+ * Distintivo de la tarjeta. Sale de los datos de arriba, no se escribe a mano:
+ * así nunca dice algo que los datos no respalden, y las cuatro tarjetas dicen
+ * cosas distintas en vez de repetir "ruta y parque".
+ */
+export function badge(car: Car): string | undefined {
+  if (car.price === minPrice) return 'La más económica';
+  if (car.type.includes('4x4')) return 'La 4x4';
+  if (car.seats >= 7) return `${car.seats} asientos`;
+  if (car.year === Math.max(...fleet.map((c) => c.year))) return 'La más nueva';
+  return undefined;
 }

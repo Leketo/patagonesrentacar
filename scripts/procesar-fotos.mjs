@@ -21,8 +21,10 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const require = createRequire(import.meta.url);
-const sharp = require('sharp');
+// sharp ya viene con Astro (es su servicio de imágenes), así que no se agrega
+// ninguna dependencia nueva para esto.
+const cargar = createRequire(import.meta.url);
+const sharp = cargar('sharp');
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ORIGEN = path.resolve(raiz, '..', 'img');
@@ -40,12 +42,6 @@ const trabajos = [
     destino: 'portada/puerto-natales-subaru.jpg',
     nota: 'Subaru XV en la costanera, con el letrero de Puerto Natales. 16:9 para la portada.',
     encuadre: { x: 0, y: 180, ancho: 1284, alto: 722 },
-  },
-  {
-    origen: 'WhatsApp Image 2026-11-13 at 14.11.22 (1).jpeg',
-    destino: 'flota/subaru-xv.jpg',
-    nota: 'La misma foto, encuadrada 3:2 para la tarjeta y la ficha.',
-    encuadre: { x: 0, y: 90, ancho: 1284, alto: 856 },
   },
   {
     origen: 'WhatsApp Image 2026-11-13 at 14.11.22.jpeg',
@@ -66,6 +62,16 @@ const trabajos = [
 // asi que Astro no los procesa ni los publica.
 const yaEnRepo = [
   {
+    // La foto nueva del Subaru (la del letrero) se reserva para la portada. En
+    // la tarjeta y la ficha va esta otra, tambien real y tambien tomada en
+    // Puerto Natales: si se repitiera la misma, el hero y la primera tarjeta
+    // mostrarian la misma imagen una debajo de la otra.
+    origen: path.join(raiz, 'src', 'fotos-originales', 'subaru-xv.jpg'),
+    destino: 'flota/subaru-xv.jpg',
+    nota: 'Subaru de frente, en Puerto Natales. Encuadrada 3:2.',
+    encuadre: { x: 0, y: 60, ancho: 1200, alto: 800 },
+  },
+  {
     origen: path.join(raiz, 'src', 'fotos-originales', 'suzuki-grand-nomade.jpg'),
     destino: 'flota/suzuki-grand-nomade.jpg',
     nota: 'Se recorta gravilla de abajo, no cielo de arriba: el techo del auto llega al borde superior.',
@@ -74,7 +80,12 @@ const yaEnRepo = [
   {
     origen: path.join(raiz, 'src', 'fotos-originales', 'renault-duster.jpg'),
     destino: 'flota/renault-duster.jpg',
-    nota: 'Solo 300x168: no se recorta ni se amplia. Se muestra contenida en el marco.',
+    // La foto mide 300x168 y es la peor de las cuatro. Igual se encuadra a 3:2
+    // como las demas, porque el PO pidio que se vean parejas: dejarla con
+    // franjas la delataba al lado de las otras tres. Queda en 252 px de ancho,
+    // que en la tarjeta (288 px) se amplia 1.14x y aguanta.
+    nota: 'La mas chica de todas. Se encuadra 3:2 igual, para que la tarjeta no desentone.',
+    encuadre: { x: 20, y: 0, ancho: 252, alto: 168 },
   },
 ];
 

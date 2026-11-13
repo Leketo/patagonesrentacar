@@ -1,95 +1,160 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import ConsultForm from '../components/ConsultForm.astro';
-import Conditions from '../components/Conditions.astro';
-import CarCard from '../components/CarCard.astro';
-import CtaBand from '../components/CtaBand.astro';
-import Mountains from '../components/Mountains.astro';
+import Consulta from '../components/Consulta.astro';
+import Condiciones from '../components/Condiciones.astro';
+import TarjetaAuto from '../components/TarjetaAuto.astro';
+import Cierre from '../components/Cierre.astro';
+import Icono from '../components/Icono.astro';
 import { site } from '../data/site';
 import { fleet, minPrice } from '../data/fleet';
 import { parkRoutes } from '../data/routes';
-import { clp } from '../lib/format';
+import { clp, waLink } from '../lib/format';
+import portada from '../assets/portada/puerto-natales-subaru.jpg';
 ---
 <Base
-  title="Arriendo de autos en Puerto Natales y Torres del Paine | Patagones Rent a Car"
-  description={`SUV automáticas con seguro y kilometraje libre en Puerto Natales, desde ${clp(minPrice)} por día con IVA incluido. Entrega en el aeropuerto o en tu hotel. Consulta por WhatsApp.`}
+  title="Arriendo de autos en Puerto Natales para Torres del Paine | Patagones Rent a Car"
+  description={`SUV automáticas desde ${clp(minPrice)} por día con IVA, seguro y kilometraje libre incluidos. Te la entregamos en el aeropuerto de Puerto Natales o en tu hotel. Consulta por WhatsApp.`}
 >
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Puerto Natales · Patagonia chilena</p>
-        <h1 class="display display-xl">Tu auto listo para Torres del Paine.</h1>
-        <p class="lead">
-          {site.slogan} SUV automáticas con seguro y kilometraje libre, entregadas en el
-          aeropuerto o en tu hotel.
+  <section class="seccion hero">
+    <div class="hero__reja">
+      <div class="hero__texto">
+        <h1 class="titular titular--portada">Tu auto listo para Torres del Paine</h1>
+        <p class="bajada">
+          SUV automáticas con seguro y kilometraje libre, entregadas en el aeropuerto de
+          {site.city} o en tu hotel.
         </p>
-        <ConsultForm />
-        <p class="hero-meta">{site.hours} · Desde {clp(minPrice)} por día, IVA incluido.</p>
       </div>
-      <div class="hero-art">
-        <Mountains />
+
+      <figure class="hero__foto">
+        <Image
+          src={portada}
+          alt="Subaru XV rojo de la flota, estacionado junto al letrero de Puerto Natales, con el fiordo y la cordillera nevada al fondo"
+          widths={[640, 960, 1284]}
+          sizes="(min-width: 900px) 58vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+
+      <div class="hero__oferta">
+        <p class="desde">
+          <span class="desde__cifra">{clp(minPrice)}</span>
+          <span class="desde__glosa">por día, IVA incluido</span>
+        </p>
+
+        <div class="hero__acciones">
+          <a class="boton boton--luz boton--grande" href="#flota">Ver los autos y precios</a>
+          <a class="boton boton--linea boton--grande" href={waLink()} rel="noopener">
+            <Icono name="wasap" size={18} />
+            Consultar por WhatsApp
+          </a>
+        </div>
       </div>
+    </div>
+    <div class="contenedor">
+      <p class="hero__pie">El Subaru XV de la flota, en la costanera de {site.city}.</p>
     </div>
   </section>
 
-  <section class="section section-light" aria-labelledby="condiciones-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="condiciones-titulo" class="display display-l">Las condiciones, antes de que preguntes.</h2>
+  <section class="seccion" id="flota" aria-labelledby="t-flota">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-flota" class="titular titular--seccion">Los cuatro autos, con su precio</h2>
+        <p>
+          Todas automáticas. Precio por día con IVA incluido: el que ves es el que te
+          cotizamos.
+        </p>
       </div>
-      <Conditions />
-      <p class="fine-print"><a href="/condiciones/">Ver requisitos y preguntas frecuentes</a></p>
-    </div>
-  </section>
 
-  <section class="section section-light" style="padding-top: 0" aria-labelledby="flota-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="flota-titulo" class="display display-l">Nuestra flota</h2>
-        <p>Cuatro SUV automáticas. Entrega con estanque lleno y revisión previa al viaje.</p>
+      <div class="flota">
+        {fleet.map((car) => <TarjetaAuto car={car} />)}
       </div>
-      <div class="fleet-grid">
-        {fleet.map((car) => <CarCard car={car} />)}
-      </div>
-      <p class="fine-print">Precios por día con IVA incluido. La tarifa se ajusta desde dos días de arriendo.</p>
-    </div>
-  </section>
 
-  <section class="section" aria-labelledby="rutas-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="rutas-titulo" class="display display-l">Rutas en Torres del Paine</h2>
-        <p>El parque queda a poco más de dos horas de Puerto Natales. Elige el auto según tu ruta.</p>
-      </div>
-      <div class="routes-grid">
-        {
-          parkRoutes.map((route) => (
-            <article class="route-card">
-              <h3>{route.name}</h3>
-              <p class="route-meta">{route.duration}</p>
-              <p class="route-reco">Recomendado: {route.recommended}</p>
-            </article>
-          ))
-        }
-      </div>
-      <p class="fine-print" style="color: var(--muted)">
-        <a href="/torres-del-paine/">Ver la guía de rutas</a>
+      <p class="letra-chica tras-bloque">
+        Desde dos días de arriendo la tarifa se ajusta.
+        <a class="enlace" href="/flota/">Ver la flota completa</a>
       </p>
     </div>
   </section>
 
-  <section class="section" style="padding-top: 0" aria-labelledby="pasos-titulo">
-    <div class="container" style="padding-top: 56px; border-top: 1px solid var(--line)">
-      <div class="section-head">
-        <h2 id="pasos-titulo" class="display display-l">Reserva en tres pasos</h2>
+  <section class="seccion seccion--granito" aria-labelledby="t-condiciones">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-condiciones" class="titular titular--seccion">
+          Las condiciones, antes de que preguntes
+        </h2>
+        <p>
+          Todo va en el precio de arriba, y hay asistencia en ruta las 24 horas. Lo que
+          todavía no está definido también aparece acá, dicho como lo que es.
+        </p>
       </div>
-      <ol class="steps">
-        <li><strong>Elige auto y fechas</strong><span>Ves el precio por día y las condiciones en la misma página.</span></li>
-        <li><strong>Confirmamos por WhatsApp</strong><span>Te enviamos la disponibilidad y el precio final.</span></li>
-        <li><strong>Recibe el auto</strong><span>En el aeropuerto o en tu hotel, con el estanque lleno.</span></li>
-      </ol>
+
+      <Condiciones />
+
+      <p class="letra-chica tras-bloque">
+        <a class="enlace" href="/condiciones/">Requisitos y preguntas frecuentes</a>
+      </p>
     </div>
   </section>
 
-  <CtaBand />
+  <section class="seccion" aria-labelledby="t-rutas">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-rutas" class="titular titular--seccion">A qué vas al parque</h2>
+        <p>
+          Torres del Paine queda a poco más de dos horas de {site.city}. Según la ruta que
+          hagas, conviene un auto u otro.
+        </p>
+      </div>
+
+      <div class="rutas">
+        {
+          parkRoutes.map((route) => (
+            <article class="ruta">
+              <h3 class="ruta__nombre">{route.name}</h3>
+              <p class="ruta__duracion">{route.duration}</p>
+              <p class="ruta__auto">Recomendado: {route.recommended}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="letra-chica tras-bloque">
+        <a class="enlace" href="/torres-del-paine/">Ver la guía de rutas con el auto de cada una</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-consulta">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-consulta" class="titular titular--seccion">Consulta con tus fechas</h2>
+        <p>
+          Elige auto y fechas y se abre WhatsApp con el mensaje escrito. No se guarda nada
+          ni se paga en línea.
+        </p>
+      </div>
+
+      <div class="pila">
+        <Consulta id="portada" />
+        <ol class="pasos">
+          <li>
+            <strong>Nos escribes</strong>
+            <span>Con el auto que quieres y tus fechas.</span>
+          </li>
+          <li>
+            <strong>Te confirmamos</strong>
+            <span>Disponibilidad y precio final por WhatsApp.</span>
+          </li>
+          <li>
+            <strong>Recibes el auto</strong>
+            <span>En el aeropuerto o en tu hotel, con el estanque lleno.</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <Cierre />
 </Base>

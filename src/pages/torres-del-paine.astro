@@ -1,56 +1,68 @@
 ---
 import Base from '../layouts/Base.astro';
-import CtaBand from '../components/CtaBand.astro';
-import Icon from '../components/Icon.astro';
-import Mountains from '../components/Mountains.astro';
+import Cierre from '../components/Cierre.astro';
+import Icono from '../components/Icono.astro';
+import Macizo from '../components/Macizo.astro';
 import { parkRoutes, parkTips } from '../data/routes';
 import { findCar } from '../data/fleet';
+import { site } from '../data/site';
 import { clp } from '../lib/format';
 ---
 <Base
-  title="Rent a car para Torres del Paine desde Puerto Natales"
-  description="Rutas en Torres del Paine en auto propio: Base Torres, Circuito W, Glaciar Grey y Mirador Cuernos, con el auto recomendado para cada una. Arriendo en Puerto Natales."
+  title="Ir a Torres del Paine en auto desde Puerto Natales"
+  description="Las rutas de Torres del Paine en auto propio: Base Torres, Circuito W, Glaciar Grey y Mirador Cuernos, con el auto de la flota que conviene para cada una. Arriendo en Puerto Natales."
 >
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Guía de rutas</p>
-        <h1 class="display display-xl">Torres del Paine en tu propio auto.</h1>
-        <p class="lead">
-          Sales de Puerto Natales a la hora que quieras y llegas al parque en poco más de dos
-          horas. Aquí tienes qué auto conviene para cada ruta.
+  <section class="seccion parque-hero">
+    <div class="contenedor">
+      <div class="parque-hero__texto">
+        <h1 class="titular titular--pagina">Torres del Paine en tu propio auto</h1>
+        <p class="bajada">
+          Sales de {site.city} a la hora que quieras, paras donde quieras y llegas al parque
+          en poco más de dos horas. Aquí tienes qué auto conviene para cada ruta.
         </p>
       </div>
-      <div class="hero-art" style="min-height: 280px">
-        <Mountains />
-      </div>
+    </div>
+    <div class="parque-hero__macizo">
+      <Macizo id="hero" />
+    </div>
+    <div class="contenedor">
+      <p class="hero__pie">
+        Ilustración del macizo: el Paine Grande, los Cuernos y las tres Torres con la luz
+        del amanecer en la cara este.
+      </p>
     </div>
   </section>
 
-  <section class="section section-light" style="padding-top: 56px" aria-labelledby="rutas-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="rutas-titulo" class="display display-l">Rutas y auto recomendado</h2>
+  <section class="seccion" aria-labelledby="t-rutas">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-rutas" class="titular titular--seccion">Las rutas y su auto</h2>
+        <p>
+          Las entradas al parque y los horarios de navegación se compran aparte: conviene
+          dejarlos listos antes de salir.
+        </p>
       </div>
-      <div class="fleet-grid">
+
+      <div class="rutas">
         {
           parkRoutes.map((route) => {
             const car = route.carSlug ? findCar(route.carSlug) : undefined;
             return (
-              <article class="car-card" id={route.slug}>
-                <div class="car-body">
-                  <span class="car-tag">{route.duration}</span>
-                  <h3>{route.name}</h3>
-                  <p class="car-specs">{route.detail}</p>
-                  <p class="car-price" style="margin-top: 4px">
-                    Recomendado: <strong style="font-family: var(--font-body); font-size: 1rem">{route.recommended}</strong>
-                  </p>
+              <article class="ruta" id={route.slug}>
+                <h3 class="ruta__nombre">{route.name}</h3>
+                <p class="ruta__duracion">{route.duration}</p>
+                <p class="ruta__detalle">{route.detail}</p>
+                <p class="ruta__auto">
+                  Recomendado: {route.recommended}
                   {car && (
-                    <a class="btn btn-dark" href={`/flota/${car.slug}/`}>
-                      {car.name} · {clp(car.price)} por día
-                    </a>
+                    <>
+                      {' · '}
+                      <a class="enlace" href={`/flota/${car.slug}/`}>
+                        {car.name} {car.year}, {clp(car.price)} por día
+                      </a>
+                    </>
                   )}
-                </div>
+                </p>
               </article>
             );
           })
@@ -59,23 +71,57 @@ import { clp } from '../lib/format';
     </div>
   </section>
 
-  <section class="section" aria-labelledby="tips-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="tips-titulo" class="display display-l">Antes de salir</h2>
+  <section class="seccion seccion--granito" aria-labelledby="t-antes">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-antes" class="titular titular--seccion">Antes de salir</h2>
       </div>
-      <ul class="check-list" style="max-width: 44rem">
+      <ul class="tildes">
         {
           parkTips.map((tip) => (
             <li>
-              <Icon name="check" />
-              {tip}
+              <Icono name="tilde" size={20} />
+              <span>{tip}</span>
             </li>
           ))
         }
+        <li>
+          <Icono name="tilde" size={20} />
+          <span>
+            Si algo pasa en la ruta, tienes asistencia las 24 horas. Para arriendos
+            atendemos {site.hours.toLowerCase()}.
+          </span>
+        </li>
       </ul>
     </div>
   </section>
 
-  <CtaBand title="¿Armamos tu viaje?" message="Hola, vengo de patagonesrentacar.cl y quiero arrendar un auto para ir a Torres del Paine." />
+  <Cierre
+    titulo="¿Armamos tu viaje?"
+    texto="Cuéntanos qué ruta harás y cuántos días, y te decimos qué auto conviene."
+    mensaje="Hola, vengo de patagonesrentacar.cl y quiero arrendar un auto para ir a Torres del Paine."
+  />
 </Base>
+
+<style>
+  /* La ilustración sangra de borde a borde: es lo único que se ve en esta
+     página, así que se gana el ancho completo. */
+  .parque-hero {
+    padding-block-end: 0;
+  }
+
+  .parque-hero__texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e4);
+    max-width: 34rem;
+    margin-bottom: var(--e6);
+  }
+
+  /* El alto crece con la pantalla, pero la ilustración se ancla abajo: lo que
+     se recorta al ensancharse es cielo, nunca el macizo. */
+  .parque-hero__macizo {
+    height: clamp(230px, 27vw, 420px);
+    overflow: hidden;
+  }
+</style>

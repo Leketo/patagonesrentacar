@@ -1,18 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
-import Conditions from '../components/Conditions.astro';
-import CtaBand from '../components/CtaBand.astro';
-import Icon from '../components/Icon.astro';
-import { site, requirements, services } from '../data/site';
+import Condiciones from '../components/Condiciones.astro';
+import Cierre from '../components/Cierre.astro';
+import Icono from '../components/Icono.astro';
+import { site, requirements, services, conditions } from '../data/site';
+import { minPrice } from '../data/fleet';
+import { clp } from '../lib/format';
 
-const faqs = [
+const preguntas = [
   {
     q: '¿Qué necesito para arrendar?',
     a: `Cédula de identidad o pasaporte vigente, y licencia de conducir vigente a nombre de quien retira el auto. La edad mínima es de ${site.minAge} años.`,
   },
   {
     q: '¿El precio incluye IVA y seguro?',
-    a: 'Sí. El precio por día que ves en el sitio incluye IVA y el seguro.',
+    a: `Sí. El precio por día que ves en el sitio ya trae el IVA y el seguro. Los precios parten en ${clp(minPrice)} por día.`,
   },
   {
     q: '¿Hay límite de kilómetros?',
@@ -20,69 +22,111 @@ const faqs = [
   },
   {
     q: '¿Dónde retiro y devuelvo el auto?',
-    a: 'Te lo entregamos en el aeropuerto de Puerto Natales o en tu hotel. Lo coordinamos por WhatsApp.',
+    a: `Te lo entregamos en el aeropuerto de ${site.city} o en tu hotel, y lo devuelves donde acordemos. Todo se coordina por WhatsApp.`,
   },
   {
     q: '¿Cómo cambia el precio si arriendo varios días?',
-    a: 'La tarifa se ajusta desde dos días de arriendo. Escríbenos con tus fechas y te enviamos el precio final.',
+    a: 'La tarifa se ajusta desde dos días de arriendo. Escríbenos con tus fechas y te enviamos el precio final antes de que decidas.',
   },
   {
     q: '¿Puedo agregar otro conductor?',
-    a: 'Sí, se pueden agregar conductores adicionales. Cada uno debe cumplir los mismos requisitos.',
+    a: 'Sí. Cada conductor adicional debe cumplir los mismos requisitos: licencia vigente, documento de identidad y la edad mínima.',
   },
   {
     q: '¿Qué pasa si tengo un problema en ruta?',
-    a: `Tienes asistencia en ruta las 24 horas. La atención para reservas es ${site.hours.toLowerCase()}.`,
+    a: `Tienes asistencia en ruta las 24 horas. La atención para arriendos y consultas es ${site.hours.toLowerCase()}.`,
+  },
+  {
+    q: '¿Puedo cruzar a Argentina con el auto?',
+    a: 'Es uno de los datos que todavía no tenemos cerrados. Consúltanos por WhatsApp antes de reservar y te lo confirmamos.',
+  },
+  {
+    q: '¿Se pide depósito en garantía?',
+    a: 'Es otro de los datos que todavía no tenemos cerrados. Pregúntanos por WhatsApp antes de reservar y te lo confirmamos.',
   },
   {
     q: '¿Qué debo saber para entrar a Torres del Paine?',
-    a: 'Los accesos al parque requieren entrada oficial, y dentro del parque el auto se deja solo en estacionamientos habilitados.',
+    a: 'Los accesos al parque requieren entrada oficial, que se compra antes de viajar. Dentro del parque el auto se deja solo en estacionamientos habilitados.',
+  },
+  {
+    q: '¿Se puede reservar y pagar en línea?',
+    a: 'No. Este sitio es un catálogo: la consulta y la reserva se hacen por WhatsApp, y el arriendo se formaliza con un contrato al retirar el vehículo.',
   },
 ];
+
+// Las mismas preguntas, para los buscadores.
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: preguntas.map((p) => ({
+      '@type': 'Question',
+      name: p.q,
+      acceptedAnswer: { '@type': 'Answer', text: p.a },
+    })),
+  },
+];
+
+const pendientes = conditions.filter((c) => c.value === null).map((c) => c.label.toLowerCase());
 ---
 <Base
-  title="Condiciones y requisitos de arriendo"
-  description={`Requisitos para arrendar en Patagones Rent a Car: edad mínima ${site.minAge} años, licencia vigente, seguro incluido, kilometraje libre y precios con IVA incluido.`}
+  title="Condiciones, requisitos y preguntas frecuentes"
+  description={`Requisitos para arrendar en ${site.name}: edad mínima ${site.minAge} años, licencia vigente, seguro incluido, kilometraje libre y precios con IVA incluido.`}
+  schema={schema}
 >
-  <div class="container page-head">
-    <p class="eyebrow">Condiciones</p>
-    <h1 class="display display-xl">Claro desde el principio.</h1>
-    <p class="lead">Todo lo que necesitas saber antes de reservar, en una sola página.</p>
+  <div class="contenedor encabezado-pagina">
+    <h1 class="titular titular--pagina">Claro desde el principio</h1>
+    <p class="bajada">
+      Todo lo que conviene saber antes de escribirnos, en una página. Lo que todavía no
+      está definido también está aquí, dicho como lo que es.
+    </p>
   </div>
 
-  <section class="section section-light">
-    <div class="container">
-      <Conditions />
+  <section class="seccion seccion--pegada" aria-labelledby="t-cuadro">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-cuadro" class="titular titular--seccion">El cuadro completo</h2>
+      </div>
+      <Condiciones />
+      {
+        pendientes.length > 0 && (
+          <p class="letra-chica tras-bloque">
+            Donde dice “Consúltanos” ({pendientes.join(', ')}) es porque todavía no tenemos
+            el dato cerrado. Preferimos decirlo antes que publicar algo que después cambie:
+            pregúntanos por WhatsApp y te lo respondemos.
+          </p>
+        )
+      }
     </div>
   </section>
 
-  <section class="section section-light" style="padding-top: 0" aria-labelledby="req-titulo">
-    <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 40px">
+  <section class="seccion seccion--papel" aria-labelledby="t-requisitos">
+    <div class="contenedor dos-columnas">
       <div>
-        <div class="section-head">
-          <h2 id="req-titulo" class="display display-l">Requisitos</h2>
+        <div class="cabeza-seccion">
+          <h2 id="t-requisitos" class="titular titular--seccion">Qué tienes que traer</h2>
         </div>
-        <ul class="check-list">
+        <ul class="tildes">
           {
             requirements.map((r) => (
               <li>
-                <Icon name="check" />
-                {r}
+                <Icono name="tilde" size={20} />
+                <span>{r}</span>
               </li>
             ))
           }
         </ul>
       </div>
       <div>
-        <div class="section-head">
-          <h2 class="display display-l">Incluido</h2>
+        <div class="cabeza-seccion">
+          <h2 class="titular titular--seccion">Qué va incluido</h2>
         </div>
-        <ul class="check-list">
+        <ul class="tildes">
           {
             services.map((s) => (
               <li>
-                <Icon name="check" />
-                {s}
+                <Icono name="tilde" size={20} />
+                <span>{s}</span>
               </li>
             ))
           }
@@ -91,17 +135,17 @@ const faqs = [
     </div>
   </section>
 
-  <section class="section section-light" style="padding-top: 0" aria-labelledby="faq-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="faq-titulo" class="display display-l">Preguntas frecuentes</h2>
+  <section class="seccion seccion--papel seccion--pegada" aria-labelledby="t-preguntas">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <h2 id="t-preguntas" class="titular titular--seccion">Preguntas frecuentes</h2>
       </div>
-      <div class="faq">
+      <div class="preguntas">
         {
-          faqs.map((f) => (
+          preguntas.map((p) => (
             <details>
-              <summary>{f.q}</summary>
-              <p>{f.a}</p>
+              <summary>{p.q}</summary>
+              <p>{p.a}</p>
             </details>
           ))
         }
@@ -109,5 +153,17 @@ const faqs = [
     </div>
   </section>
 
-  <CtaBand title="¿Otra pregunta?" message="Hola, vengo de patagonesrentacar.cl y tengo una pregunta sobre las condiciones de arriendo." />
+  <Cierre
+    titulo="¿Te quedó una duda?"
+    texto="Pregúntanos por WhatsApp. Si no tenemos el dato, te lo decimos."
+    mensaje="Hola, vengo de patagonesrentacar.cl y tengo una pregunta sobre las condiciones de arriendo."
+  />
 </Base>
+
+<style>
+  .dos-columnas {
+    display: grid;
+    gap: var(--e7);
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  }
+</style>

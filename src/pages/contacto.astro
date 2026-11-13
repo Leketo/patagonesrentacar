@@ -1,51 +1,70 @@
 ---
 import Base from '../layouts/Base.astro';
-import ConsultForm from '../components/ConsultForm.astro';
-import Icon from '../components/Icon.astro';
+import Consulta from '../components/Consulta.astro';
+import Icono from '../components/Icono.astro';
 import { site } from '../data/site';
 import { waLink } from '../lib/format';
 ---
 <Base
   title="Contacto y reservas"
-  description={`Consulta disponibilidad por WhatsApp al ${site.phoneDisplay}. Atención ${site.hours.toLowerCase()} en Puerto Natales.`}
+  description={`Consulta disponibilidad por WhatsApp al ${site.phoneDisplay}. Atención ${site.hours.toLowerCase()} en ${site.city}, Patagonia chilena.`}
 >
-  <div class="container page-head">
-    <p class="eyebrow">Contacto</p>
-    <h1 class="display display-xl">Hablemos por WhatsApp.</h1>
-    <p class="lead">Elige auto y fechas, y te respondemos con la disponibilidad y el precio final.</p>
+  <div class="contenedor encabezado-pagina">
+    <h1 class="titular titular--pagina">Hablemos por WhatsApp</h1>
+    <p class="bajada">
+      Es la vía más rápida y la única que usamos para reservar. Elige auto y fechas y te
+      respondemos con la disponibilidad y el precio final.
+    </p>
   </div>
 
-  <section class="section" style="padding-top: 0">
-    <div class="container" style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
-      <div style="flex: 1 1 460px; min-width: 0">
-        <ConsultForm />
+  <section class="seccion seccion--pegada">
+    <div class="contenedor contacto-reja">
+      <div class="pila">
+        <h2 class="titular titular--bloque">Consulta con tus fechas</h2>
+        <Consulta id="contacto" />
       </div>
-      <div class="contact-grid" style="flex: 1 1 320px; min-width: 0; grid-template-columns: 1fr">
-        <div class="contact-card">
+
+      <div class="contacto">
+        <div>
           <h2>WhatsApp</h2>
-          <p>{site.phoneDisplay}</p>
-          <a class="btn btn-outline" href={waLink()} rel="noopener" style="align-self: flex-start">
-            <Icon name="whatsapp" size={18} />
+          <p class="contacto__dato">{site.phoneDisplay}</p>
+          <p>La vía que usamos para reservar.</p>
+          <a class="boton boton--luz" href={waLink()} rel="noopener">
+            <Icono name="wasap" size={18} />
             Escribir ahora
           </a>
         </div>
-        <div class="contact-card">
-          <h2>Llamar</h2>
-          <p><a href={site.phoneHref}>{site.phoneDisplay}</a></p>
+
+        <div>
+          <h2>Teléfono</h2>
+          <p class="contacto__dato">
+            <a class="enlace" href={site.phoneHref}>{site.phoneDisplay}</a>
+          </p>
+          <p>El mismo número, si prefieres llamar.</p>
         </div>
-        <div class="contact-card">
+
+        <div>
           <h2>Horario</h2>
-          <p>{site.hours}. Asistencia en ruta las 24 horas.</p>
+          <p class="contacto__dato">8:00 a 21:00</p>
+          <p>Todos los días. Asistencia en ruta las 24 horas.</p>
         </div>
-        <div class="contact-card">
+
+        <div>
           <h2>Dónde estamos</h2>
-          <p>{site.city}, {site.region}, {site.country}. Entregamos en el aeropuerto o en tu hotel.</p>
+          <p class="contacto__dato">{site.city}</p>
+          <p>
+            {site.region}, {site.country}. Te entregamos el auto en el aeropuerto o en tu
+            hotel. No somos el Patagones Rent a Car de Bariloche, Argentina.
+          </p>
         </div>
+
         {
           site.email && (
-            <div class="contact-card">
+            <div>
               <h2>Correo</h2>
-              <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+              <p class="contacto__dato">
+                <a class="enlace" href={`mailto:${site.email}`}>{site.email}</a>
+              </p>
             </div>
           )
         }
@@ -53,3 +72,23 @@ import { waLink } from '../lib/format';
     </div>
   </section>
 </Base>
+
+<style>
+  .contacto-reja {
+    display: grid;
+    gap: var(--e7);
+    align-items: start;
+  }
+
+  @media (min-width: 980px) {
+    .contacto-reja {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  /* En contacto las tarjetas van una bajo otra, no en reja: son datos de
+     lectura, no opciones que se comparen. */
+  .contacto-reja .contacto {
+    grid-template-columns: 1fr;
+  }
+</style>

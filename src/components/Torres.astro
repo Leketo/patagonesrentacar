@@ -1,0 +1,21 @@
+---
+// Las tres torres como marca, en chico. Es el mismo motivo del favicon y de
+// la ilustración del macizo: tres agujas y la luz del amanecer en la cara este.
+interface Props {
+  size?: number;
+}
+const { size = 30 } = Astro.props;
+---
+<svg
+  class="marca__torres"
+  width={size}
+  height={size}
+  viewBox="0 0 30 30"
+  aria-hidden="true"
+  focusable="false"
+>
+  <polygon points="0,27 5,19 9,10 13,21 17,6 21,17 25,13 30,27" fill="#2b4454" />
+  <polygon points="9,10 13,21 11,24 8,16" fill="#f08a3c" />
+  <polygon points="17,6 21,17 19,21 15,12" fill="#f08a3c" />
+  <polygon points="25,13 28,21 26,24 23,17" fill="#f08a3c" />
+</svg>

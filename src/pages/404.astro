@@ -1,14 +1,36 @@
 ---
 import Base from '../layouts/Base.astro';
+import { minPrice } from '../data/fleet';
+import { clp } from '../lib/format';
 ---
-<Base title="Página no encontrada" description="La página que buscas no existe." noindex>
-  <div class="container page-head" style="padding-block: 80px 120px">
-    <p class="eyebrow">Error 404</p>
-    <h1 class="display display-xl">Este camino no lleva a ningún lado.</h1>
-    <p class="lead">La página que buscas no existe o cambió de dirección.</p>
-    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px">
-      <a class="btn btn-accent" href="/">Volver al inicio</a>
-      <a class="btn btn-outline" href="/flota/">Ver la flota</a>
+<Base
+  title="Esta página no existe"
+  description="La página que buscas no existe o cambió de dirección."
+  noindex
+>
+  <div class="contenedor encabezado-pagina error">
+    <h1 class="titular titular--pagina">Este camino no lleva a ningún lado</h1>
+    <p class="bajada">
+      La página que buscas no existe o cambió de dirección. Desde aquí sí hay salida.
+    </p>
+    <div class="error__salidas">
+      <a class="boton boton--luz boton--grande" href="/flota/">
+        Ver los autos, desde {clp(minPrice)} por día
+      </a>
+      <a class="boton boton--linea boton--grande" href="/">Ir al inicio</a>
     </div>
   </div>
 </Base>
+
+<style>
+  .error {
+    padding-block: clamp(48px, 10vw, 112px) clamp(64px, 12vw, 140px);
+  }
+
+  .error__salidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e3);
+    margin-top: var(--e3);
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+import Icono from './Icono.astro';
+import { site } from '../data/site';
+import { waLink } from '../lib/format';
+
+const anio = new Date().getFullYear();
+---
+<footer class="pie">
+  <div class="contenedor pie__reja">
+    <div class="pie__bloque">
+      <span class="pie__marca">{site.name}</span>
+      <p class="pie__lema">{site.slogan}</p>
+      <p>{site.city}, {site.region}, {site.country}</p>
+      <p>{site.hours}</p>
+      <p>Asistencia en ruta las 24 horas</p>
+    </div>
+
+    <div class="pie__bloque">
+      <p>
+        WhatsApp <a class="enlace" href={waLink()} rel="noopener">{site.phoneDisplay}</a>
+      </p>
+      <p>
+        Teléfono <a class="enlace" href={site.phoneHref}>{site.phoneDisplay}</a>
+      </p>
+      {site.email && <p><a class="enlace" href={`mailto:${site.email}`}>{site.email}</a></p>}
+    </div>
+
+    <nav aria-label="Legal">
+      <ul class="pie__enlaces">
+        <li><a href="/condiciones/">Condiciones y requisitos</a></li>
+        <li><a href="/terminos/">Términos de uso</a></li>
+        <li><a href="/privacidad/">Privacidad</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="contenedor pie__cierre">
+    <p>© {anio} {site.name}. Arriendo de autos en {site.city}, Patagonia chilena.</p>
+  </div>
+</footer>
+
+<a class="wasap-flota" href={waLink()} rel="noopener" aria-label="Consultar por WhatsApp">
+  <Icono name="wasap" size={28} />
+</a>

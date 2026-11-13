@@ -1,0 +1,196 @@
+---
+// Consulta de disponibilidad: arma el mensaje y abre WhatsApp.
+// No guarda ni envía datos a ningún servidor, y no usa cookies.
+import { fleet } from '../data/fleet';
+import { site } from '../data/site';
+import { clp, waLink } from '../lib/format';
+
+interface Props {
+  /** slug del auto que viene preseleccionado (en la ficha de cada auto). */
+  selected?: string;
+  /** sobre fondo claro */
+  papel?: boolean;
+  /** id propio: puede haber dos formularios en la misma página. */
+  id?: string;
+}
+const { selected, papel = false, id = 'consulta' } = Astro.props;
+---
+<form class:list={['consulta', papel && 'consulta--papel']} data-wasap={site.whatsapp} novalidate>
+  <div class="consulta__reja">
+    <div class="campo">
+      <label for={`${id}-auto`}>Auto</label>
+      <select id={`${id}-auto`} name="auto">
+        <option value="">El que esté disponible</option>
+        {
+          fleet.map((car) => (
+            <option
+              value={`${car.name} ${car.year}`}
+              data-precio={clp(car.price)}
+              selected={car.slug === selected}
+            >
+              {car.name} {car.year} — {clp(car.price)}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for={`${id}-retiro`}>Dónde lo retiras</label>
+      <select id={`${id}-retiro`} name="retiro">
+        <option>Aeropuerto de Puerto Natales</option>
+        <option>Mi hotel en Puerto Natales</option>
+        <option>Otro lugar, lo coordinamos por chat</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for={`${id}-desde`}>Lo retiras el</label>
+      <input id={`${id}-desde`} name="desde" type="date" required />
+    </div>
+
+    <div class="campo">
+      <label for={`${id}-hasta`}>Lo devuelves el</label>
+      <input id={`${id}-hasta`} name="hasta" type="date" required />
+    </div>
+  </div>
+
+  <button type="submit" class="boton boton--luz boton--grande">Consultar por WhatsApp</button>
+
+  <p class="consulta__aviso" role="status">
+    Te respondemos con la disponibilidad y el precio final. No se paga nada en línea.
+  </p>
+
+  <noscript>
+    <p class="consulta__aviso">
+      Para armar el mensaje con tus fechas hace falta JavaScript.
+      <a class="enlace" href={waLink()} rel="noopener">Escríbenos directo por WhatsApp</a>
+      y lo vemos por chat.
+    </p>
+  </noscript>
+</form>
+
+<script>
+  const AVISO = 'Te respondemos con la disponibilidad y el precio final. No se paga nada en línea.';
+
+  function aLocal(iso: string): string {
+    const [a, m, d] = iso.split('-');
+    return `${d}-${m}-${a}`;
+  }
+
+  function hoyIso(): string {
+    const ahora = new Date();
+    const local = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  }
+
+  function masDias(iso: string, dias: number): string {
+    const d = new Date(`${iso}T12:00:00`);
+    d.setDate(d.getDate() + dias);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function dias(a: string, b: string): number {
+    return Math.round(
+      (Date.parse(`${b}T12:00:00`) - Date.parse(`${a}T12:00:00`)) / 86400000,
+    );
+  }
+
+  document.querySelectorAll<HTMLFormElement>('form.consulta').forEach((form) => {
+    const fono = form.dataset.wasap ?? '';
+    const desde = form.querySelector<HTMLInputElement>('[name="desde"]');
+    const hasta = form.querySelector<HTMLInputElement>('[name="hasta"]');
+    const auto = form.querySelector<HTMLSelectElement>('[name="auto"]');
+    const retiro = form.querySelector<HTMLSelectElement>('[name="retiro"]');
+    const aviso = form.querySelector<HTMLElement>('.consulta__aviso');
+    if (!desde || !hasta || !auto || !retiro || !aviso) return;
+
+    const hoy = hoyIso();
+    const tope = masDias(hoy, 365);
+    desde.min = hoy;
+    desde.max = tope;
+    hasta.min = hoy;
+    hasta.max = tope;
+
+    function decir(texto: string, esError = false) {
+      aviso!.textContent = texto;
+      aviso!.classList.toggle('consulta__aviso--error', esError);
+    }
+
+    function marcar(campo: HTMLElement | null) {
+      [desde, hasta].forEach((c) => c?.removeAttribute('aria-invalid'));
+      if (campo) {
+        campo.setAttribute('aria-invalid', 'true');
+        campo.focus();
+      }
+    }
+
+    // Al elegir el retiro, la devolución no puede ser antes. Y si todavía no
+    // hay devolución, se propone el día siguiente: un clic menos.
+    function alCambiarDesde() {
+      if (!desde!.value) return;
+      hasta!.min = masDias(desde!.value, 1);
+      if (!hasta!.value || hasta!.value <= desde!.value) {
+        hasta!.value = masDias(desde!.value, 1);
+      }
+      repasar();
+    }
+
+    function repasar() {
+      marcar(null);
+      if (!desde!.value || !hasta!.value) {
+        decir(AVISO);
+        return;
+      }
+      const n = dias(desde!.value, hasta!.value);
+      if (n <= 0) {
+        decir('La fecha de devolución tiene que ser posterior a la de retiro.', true);
+        return;
+      }
+      const plural = n === 1 ? 'día' : 'días';
+      decir(
+        n >= 2
+          ? `${n} ${plural} de arriendo. Desde dos días la tarifa se ajusta: te enviamos el precio final por WhatsApp.`
+          : `${n} ${plural} de arriendo. Te enviamos el precio final por WhatsApp.`,
+      );
+    }
+
+    desde.addEventListener('change', alCambiarDesde);
+    hasta.addEventListener('change', repasar);
+    auto.addEventListener('change', repasar);
+
+    form.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+
+      if (!desde.value) {
+        decir('Falta la fecha en que retiras el auto.', true);
+        marcar(desde);
+        return;
+      }
+      if (!hasta.value) {
+        decir('Falta la fecha en que devuelves el auto.', true);
+        marcar(hasta);
+        return;
+      }
+      const n = dias(desde.value, hasta.value);
+      if (n <= 0) {
+        decir('La fecha de devolución tiene que ser posterior a la de retiro.', true);
+        marcar(hasta);
+        return;
+      }
+
+      const elegido = auto.selectedOptions[0];
+      const precio = elegido?.dataset.precio;
+      const lineas = [
+        'Hola, vengo de patagonesrentacar.cl y quiero consultar disponibilidad.',
+        '',
+        `Auto: ${auto.value ? `${auto.value}${precio ? ` (${precio} por día)` : ''}` : 'el que esté disponible'}`,
+        `Retiro: ${retiro.value}`,
+        `Fechas: del ${aLocal(desde.value)} al ${aLocal(hasta.value)}`,
+        `Son ${n} ${n === 1 ? 'día' : 'días'}.`,
+      ];
+
+      window.location.href = `https://wa.me/${fono}?text=${encodeURIComponent(lineas.join('\n'))}`;
+    });
+  });
+</script>

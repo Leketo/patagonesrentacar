@@ -1,0 +1,46 @@
+---
+import Torres from './Torres.astro';
+import Icono from './Icono.astro';
+import { site } from '../data/site';
+import { waLink } from '../lib/format';
+
+const enlaces = [
+  { href: '/flota/', label: 'Flota' },
+  { href: '/torres-del-paine/', label: 'Torres del Paine' },
+  { href: '/condiciones/', label: 'Condiciones' },
+  { href: '/contacto/', label: 'Contacto' },
+];
+
+const ruta = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+---
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="contenedor cabecera__barra">
+    <a class="marca" href="/">
+      <Torres />
+      <span class="marca__texto">
+        <span class="marca__nombre">Patagones</span>
+        <span class="marca__lugar">Rent a car · {site.city}, Chile</span>
+      </span>
+    </a>
+
+    <nav aria-label="Principal">
+      <ul class="menu">
+        {
+          enlaces.map((e) => (
+            <li>
+              <a href={e.href} aria-current={ruta.startsWith(e.href) ? 'page' : undefined}>
+                {e.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="boton boton--linea" href={waLink()} rel="noopener">
+      <Icono name="wasap" size={18} />
+      WhatsApp
+    </a>
+  </div>
+</header>

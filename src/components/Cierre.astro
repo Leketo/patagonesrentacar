@@ -1,0 +1,27 @@
+---
+import { waLink } from '../lib/format';
+import { site } from '../data/site';
+
+interface Props {
+  titulo?: string;
+  texto?: string;
+  /** mensaje prellenado de WhatsApp */
+  mensaje?: string;
+}
+const {
+  titulo = 'La ruta te espera.',
+  texto = `Escríbenos y te respondemos con la disponibilidad. ${site.hours}.`,
+  mensaje,
+} = Astro.props;
+---
+<section class="seccion seccion--granito">
+  <div class="contenedor cierre">
+    <div class="cierre__texto">
+      <h2 class="titular titular--seccion">{titulo}</h2>
+      <p class="letra-chica">{texto}</p>
+    </div>
+    <a class="boton boton--luz boton--grande" href={waLink(mensaje)} rel="noopener">
+      Consultar por WhatsApp
+    </a>
+  </div>
+</section>

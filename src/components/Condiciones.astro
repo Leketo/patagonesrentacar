@@ -1,12 +1,12 @@
 ---
 import { conditions } from '../data/site';
 ---
-<dl class="conditions">
+<dl class="condiciones">
   {
     conditions.map((c) => (
-      <div class="condition">
+      <div>
         <dt>{c.label}</dt>
-        {c.value ? <dd>{c.value}</dd> : <dd class="pending">Consúltanos</dd>}
+        {c.value ? <dd>{c.value}</dd> : <dd class="pendiente">Consúltanos</dd>}
       </div>
     ))
   }
