@@ -67,7 +67,9 @@ const schema = [
   },
 ];
 
-const pendientes = conditions.filter((c) => c.value === null).map((c) => c.label.toLowerCase());
+// Sin toLowerCase: una de las etiquetas es "Cruce a Argentina" y bajarla de
+// caja escribe mal un nombre propio.
+const pendientes = conditions.filter((c) => c.value === null).map((c) => c.label);
 ---
 <Base
   title="Condiciones, requisitos y preguntas frecuentes"

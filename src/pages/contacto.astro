@@ -29,7 +29,10 @@ import { waLink } from '../lib/format';
           <h2>WhatsApp</h2>
           <p class="contacto__dato">{site.phoneDisplay}</p>
           <p>La vía que usamos para reservar.</p>
-          <a class="boton boton--luz" href={waLink()} rel="noopener">
+          <!-- Botón de línea y no naranja: el naranja es la acción principal de
+               la página, y esa es el formulario de al lado. Dos botones
+               naranjas en la misma pantalla compiten entre sí. -->
+          <a class="boton boton--linea" href={waLink()} rel="noopener">
             <Icono name="wasap" size={18} />
             Escribir ahora
           </a>
@@ -54,7 +57,8 @@ import { waLink } from '../lib/format';
           <p class="contacto__dato">{site.city}</p>
           <p>
             {site.region}, {site.country}. Te entregamos el auto en el aeropuerto o en tu
-            hotel. No somos el Patagones Rent a Car de Bariloche, Argentina.
+            hotel. Existe otro Patagones Rent a Car en Bariloche, Argentina, que no tiene
+            relación con nosotros.
           </p>
         </div>
 

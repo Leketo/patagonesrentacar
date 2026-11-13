@@ -994,10 +994,14 @@ ol {
   color: var(--tinta);
 }
 
+/* 220 px de mínimo por columna: con menos, los <select> cortan su opción más
+   larga ("Aeropuerto de Puerto Natales") y no se entiende qué dicen. Así el
+   formulario va a 4 columnas en el ancho completo, a 2 en media página y a 1
+   en el teléfono. */
 .consulta__reja {
   display: grid;
   gap: var(--e3);
-  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
 }
 
 .campo {
