@@ -1,10 +1,13 @@
 ---
-// Solo el subconjunto latino y solo los cuatro pesos que el sitio usa:
-// Barlow 400/500/600 para texto y Barlow Condensed 700 para titulares.
+// Solo el subconjunto latino y solo los tres pesos que el sitio usa de verdad:
+// Barlow 400 y 600 para texto, y Barlow Condensed 700 para titulares. Cada
+// peso son unos 22 KB, así que no se carga ninguno "por si acaso".
 import '@fontsource/barlow/latin-400.css';
-import '@fontsource/barlow/latin-500.css';
 import '@fontsource/barlow/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
+// La URL con hash del archivo, para precargarlo: el titular es lo primero que
+// se ve y lo que suele medir el LCP.
+import condensadaWoff2 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url';
 import '../styles/global.css';
 
 import Cabecera from '../components/Cabecera.astro';
@@ -95,6 +98,7 @@ const datos = [negocio, ...schema];
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0E1A22" />
+    <link rel="preload" href={condensadaWoff2} as="font" type="font/woff2" crossorigin />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />

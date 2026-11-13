@@ -50,6 +50,12 @@ const rutas = routesForCar(car.slug);
       )
     }
 
-    <a class="boton boton--linea" href={href}>Ver ficha y consultar</a>
+    <!-- El nombre del auto va en el enlace para quien navega con lector de
+         pantalla saltando de enlace en enlace: cuatro "Ver ficha y consultar"
+         idénticos no se distinguen entre sí. -->
+    <a class="boton boton--linea" href={href}>
+      Ver ficha y consultar
+      <span class="solo-lectores">el {car.name} {car.year}</span>
+    </a>
   </div>
 </article>

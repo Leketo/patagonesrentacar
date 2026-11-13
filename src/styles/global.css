@@ -256,9 +256,12 @@ ol {
   color: var(--tinta-suave);
 }
 
-/* Enlaces de texto: subrayado desde el principio, para que se vean enlaces. */
+/* Enlaces de texto: subrayado desde el principio, para que se vean enlaces.
+   El relleno vertical sube el blanco de toque a 24 px (WCAG 2.5.8) sin mover
+   la línea: en un enlace en línea el relleno no desplaza el texto. */
 .enlace {
   color: inherit;
+  padding-block: 3px;
   text-decoration-color: var(--glaciar);
   text-underline-offset: 3px;
   text-decoration-thickness: 2px;
@@ -388,7 +391,6 @@ ol {
    Patagones de Bariloche. Va aquí, en cada página, no solo en el pie. */
 .marca__lugar {
   font-size: 0.75rem;
-  font-weight: 500;
   color: var(--niebla);
   letter-spacing: 0.02em;
 }
@@ -401,7 +403,7 @@ ol {
   display: flex;
   gap: var(--e5);
   font-size: var(--t-s);
-  font-weight: 500;
+  font-weight: 600;
   list-style: none;
 }
 
@@ -758,6 +760,23 @@ ol {
   margin-bottom: var(--e5);
   font-size: var(--t-s);
   color: var(--niebla);
+}
+
+.migas ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e2);
+  list-style: none;
+}
+
+/* Blanco de toque de 24 px para las migas: son enlaces sueltos y cortos, no
+   enlaces dentro de una frase. */
+.migas a,
+.migas span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 .migas a {

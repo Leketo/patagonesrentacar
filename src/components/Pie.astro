@@ -16,11 +16,20 @@ const anio = new Date().getFullYear();
     </div>
 
     <div class="pie__bloque">
+      <!-- El mismo número es enlace de WhatsApp y enlace de teléfono. Sin el
+           texto para lectores de pantalla, los dos enlaces se llaman igual y
+           llevan a destinos distintos. -->
       <p>
-        WhatsApp <a class="enlace" href={waLink()} rel="noopener">{site.phoneDisplay}</a>
+        WhatsApp
+        <a class="enlace" href={waLink()} rel="noopener">
+          {site.phoneDisplay}<span class="solo-lectores"> por WhatsApp</span>
+        </a>
       </p>
       <p>
-        Teléfono <a class="enlace" href={site.phoneHref}>{site.phoneDisplay}</a>
+        Teléfono
+        <a class="enlace" href={site.phoneHref}>
+          {site.phoneDisplay}<span class="solo-lectores"> para llamar</span>
+        </a>
       </p>
       {site.email && <p><a class="enlace" href={`mailto:${site.email}`}>{site.email}</a></p>}
     </div>

@@ -63,17 +63,24 @@ const schema = [
 ];
 ---
 <Base
-  title={`Arriendo ${car.name} ${car.year} en Puerto Natales`}
-  description={`${car.name} ${car.year}: ${car.type} de ${car.seats} pasajeros, ${car.transmission.toLowerCase()}, a ${clp(car.price)} por día con IVA incluido. Seguro y kilometraje libre. Entrega en el aeropuerto de Puerto Natales o en tu hotel.`}
+  title={`${car.name} ${car.year} en Puerto Natales`}
+  description={`${car.name} ${car.year}, ${car.type} de ${car.seats} pasajeros. ${clp(car.price)} por día con IVA, seguro y kilometraje libre. Entrega en el aeropuerto o en tu hotel.`}
   image={car.photo.src}
   imageAlt={car.photoAlt}
   schema={schema}
 >
   <section class="seccion">
     <div class="contenedor">
+      <!-- Lista de verdad, y los separadores con aria-hidden: si no, el lector
+           de pantalla lee "mayor que" entre cada enlace. -->
       <nav class="migas" aria-label="Migas de pan">
-        <a href="/">Inicio</a> › <a href="/flota/">Flota</a> ›
-        <span aria-current="page">{car.name} {car.year}</span>
+        <ol>
+          <li><a href="/">Inicio</a></li>
+          <li aria-hidden="true">›</li>
+          <li><a href="/flota/">Flota</a></li>
+          <li aria-hidden="true">›</li>
+          <li><span aria-current="page">{car.name} {car.year}</span></li>
+        </ol>
       </nav>
 
       <div class="ficha">
