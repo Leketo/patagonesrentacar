@@ -78,16 +78,32 @@ escrito el recorte de cada una para cuando lleguen fotos nuevas.
 | `14.11.22 (1).jpeg` (1284×946) | Subaru XV junto al letrero de Puerto Natales, con el fiordo y la cordillera | **Portada** (16:9) y imagen para redes de todo el sitio |
 | `14.11.22.jpeg` (1284×364) | Panorámica del mismo Subaru en la costanera | Procesada y disponible en `src/assets/portada/`, **sin usar todavía** |
 | `14.12.48.jpeg` (716×1600) | Kia Sorento de perfil, captura de galería con barras negras | **Tarjeta y ficha del Sorento**. Reemplaza a la que tenía marca de agua |
-| `14.15.50.jpeg` (716×1600) | Kia Sorento de frente, en un servicentro | **No la usé** — ver abajo |
+| `14.15.50.jpeg` (716×1600) | Kia Sorento de frente, en un servicentro | **Descartada por el PO** — ver abajo |
 | `subaru-xv.jpg` (del repo) | Subaru de frente, en Puerto Natales | **Tarjeta y ficha del Subaru** |
 | `suzuki-grand-nomade.jpg` (del repo) | Suzuki en un patio de autos | Tarjeta y ficha del Suzuki (es la única que hay) |
 | `renault-duster.jpg` (del repo) | Duster, 300×168 | Tarjeta y ficha del Duster (es la única que hay) |
 
-**Por qué no usé la cuarta.** Tiene **dos personas identificables dentro del auto** (una
+**La cuarta foto, descartada.** Tiene **dos personas identificables dentro del auto** (una
 mujer y un niño en el asiento del acompañante) y la **patente legible**. En la foto del
 Subaru el dueño tapó la patente él mismo, así que esa es su propia convención. No publico
-caras de personas privadas sin que alguien lo autorice: la dejé fuera y queda a decisión
-del PO. Es, eso sí, la única foto del Sorento tomada en la zona.
+caras de personas privadas sin que alguien lo autorice, así que la dejé fuera y lo planteé
+al PO.
+
+**El PO la descartó**: no se puede usar porque se ven dos personas dentro del auto, una
+aparentemente menor de edad. Queda así:
+
+- El Sorento usa la **otra foto disponible, la del estacionamiento, sin personas**, con el
+  mismo tratamiento 3:2 que los otros tres autos. Ya era la que estaba en uso desde el
+  primer commit de fotos, de modo que no hubo nada que reemplazar.
+- **No hay ninguna copia de la del servicentro en el repositorio.** Nunca se copió: solo se
+  leyó desde `../img` para identificar de qué auto era. No aparece en
+  `scripts/procesar-fotos.mjs`, ni en `src/assets/`, ni en `src/fotos-originales/`, ni en
+  `public/`, ni en la salida compilada. Verificado sobre los archivos versionados y también
+  sobre los no versionados del árbol de trabajo.
+- El original sigue intacto en `../img`, que es solo lectura y no forma parte del repo.
+
+El costo de descartarla es que era la única foto del Sorento tomada en la zona: la que se
+usa está tomada en un estacionamiento subterráneo. Queda como pendiente del dueño.
 
 **Me desvié de una sugerencia del PO.** Las fotos quedaron todas en **3:2 y no en 4:3**. La
 banda útil del Sorento, una vez quitadas las barras negras de la captura, mide 716×433; un
@@ -121,6 +137,8 @@ navegador en es-CL (si no, los campos de fecha salen en `mm/dd/yyyy`):
   además no parece tomada en la zona. En la tarjeta se amplía 1,14× y aguanta, pero en la
   ficha se nota.
 - Foto del Suzuki fuera del patio de autos. La actual muestra otros autos de fondo.
+- **Foto del Kia Sorento tomada en la zona.** La que se usa está en un estacionamiento
+  subterráneo; la única que había en Patagonia la descartó el PO por mostrar a dos personas.
 - **Criterio sobre las patentes.** En la foto del Subaru está tapada y en la del Suzuki se
   lee. Conviene que el dueño decida una sola regla y la aplique a todas.
 - Verificar el punto de salida de la navegación al Glaciar Grey.

@@ -48,6 +48,11 @@ const trabajos = [
     destino: 'portada/costanera-subaru.jpg',
     nota: 'Panoramica de la costanera. Ya viene en 3.5:1, se usa tal cual como banda ancha.',
   },
+  // NO AGREGAR "WhatsApp Image 2026-11-13 at 14.15.50.jpeg" (Kia Sorento de
+  // frente, en el servicentro). El PO la descarto: se ven dos personas dentro
+  // del auto, una aparentemente menor de edad. El original se queda en ../img,
+  // pero no se copia al repo ni se publica. El Sorento usa la del
+  // estacionamiento, sin personas.
   {
     origen: 'WhatsApp Image 2026-11-13 at 14.12.48.jpeg',
     destino: 'flota/kia-sorento.jpg',

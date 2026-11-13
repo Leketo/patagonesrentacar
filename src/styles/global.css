@@ -711,9 +711,13 @@ ol {
   }
 }
 
+/* Son cuatro datos: tipo, pasajeros, transmisión y año. Las columnas van fijas
+   y no en auto-fit, porque 4 en 2 o en 4 columnas siempre llenan las filas;
+   con auto-fit caían de a 3 y dejaban una celda vacía con cara de dato que
+   falta. */
 .especificaciones {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   background: var(--granito-alto);
   border: 1px solid var(--granito-alto);
@@ -734,6 +738,14 @@ ol {
 .especificaciones dd {
   font-size: var(--t-l);
   font-weight: 600;
+}
+
+/* Recién a este ancho la columna de la ficha da para cuatro en fila sin que
+   "Transmisión / Automática" quede apretado. */
+@media (min-width: 1200px) {
+  .especificaciones {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .precio-ficha {
