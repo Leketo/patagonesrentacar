@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import ConsultForm from '../../components/ConsultForm.astro';
+import CarCard from '../../components/CarCard.astro';
+import Icon from '../../components/Icon.astro';
+import { fleet, type Car } from '../../data/fleet';
+import { services } from '../../data/site';
+import { clp } from '../../lib/format';
+
+export function getStaticPaths() {
+  return fleet.map((car) => ({ params: { slug: car.slug }, props: { car } }));
+}
+
+interface Props {
+  car: Car;
+}
+const { car } = Astro.props;
+const others = fleet.filter((c) => c.slug !== car.slug);
+---
+<Base
+  title={`Arriendo ${car.name} ${car.year} en Puerto Natales`}
+  description={`${car.name} ${car.year}, ${car.type} de ${car.seats} pasajeros, ${car.transmission.toLowerCase()}. ${clp(car.price)} por día con IVA incluido, seguro y kilometraje libre.`}
+  image={car.image}
+>
+  <section class="section" style="padding-top: 32px">
+    <div class="container">
+      <p class="breadcrumb"><a href="/">Inicio</a> › <a href="/flota/">Flota</a> › {car.name}</p>
+      <div class="car-detail">
+        <div class="car-detail-photo">
+          <img
+            src={car.image}
+            alt={car.imageAlt}
+            width={car.imageWidth}
+            height={car.imageHeight}
+            decoding="async"
+          />
+        </div>
+        <div class="car-detail-info">
+          <p class="eyebrow">{car.tag}</p>
+          <h1 class="display display-l">{car.name} {car.year}</h1>
+          <p class="lead">{car.bestFor}</p>
+          <dl class="spec-list">
+            <div><dt>Tipo</dt><dd>{car.type}</dd></div>
+            <div><dt>Pasajeros</dt><dd>{car.seats}</dd></div>
+            <div><dt>Transmisión</dt><dd>{car.transmission}</dd></div>
+          </dl>
+          <p class="price-big"><strong>{clp(car.price)}</strong> por día, IVA incluido</p>
+          <ConsultForm selected={car.slug} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" aria-labelledby="incluye-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="incluye-titulo" class="display display-l">Incluido en el arriendo</h2>
+      </div>
+      <ul class="check-list">
+        {
+          services.map((s) => (
+            <li>
+              <Icon name="check" />
+              {s}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="fine-print"><a href="/condiciones/">Ver requisitos y condiciones</a></p>
+    </div>
+  </section>
+
+  <section class="section section-light" style="padding-top: 0" aria-labelledby="otros-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="otros-titulo" class="display display-l">Otros autos</h2>
+      </div>
+      <div class="fleet-grid">
+        {others.map((c) => <CarCard car={c} />)}
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base
+  title="Política de privacidad"
+  description={`Cómo trata ${site.name} los datos de quienes visitan su sitio.`}
+>
+  <div class="container page-head">
+    <p class="eyebrow">Legal</p>
+    <h1 class="display display-xl">Privacidad</h1>
+  </div>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container prose">
+      <h2>Qué datos recogemos</h2>
+      <p>
+        Este sitio no tiene cuentas de usuario, no guarda formularios y no usa cookies de
+        seguimiento ni herramientas de publicidad.
+      </p>
+      <p>
+        El formulario de consulta no envía datos a nuestro servidor: arma un mensaje con el auto,
+        el lugar de retiro y las fechas que elijas, y lo abre en WhatsApp. Tú decides si lo
+        envías.
+      </p>
+
+      <h2>Conversaciones por WhatsApp</h2>
+      <p>
+        Lo que nos escribas por WhatsApp lo usamos solo para responder tu consulta y gestionar tu
+        arriendo. WhatsApp tiene su propia política de privacidad.
+      </p>
+
+      <h2>Registros del servidor</h2>
+      <p>
+        Como cualquier sitio web, el servidor registra datos técnicos de cada visita (dirección IP,
+        página solicitada, fecha y navegador) para su funcionamiento y seguridad.
+      </p>
+
+      <h2>Contacto</h2>
+      <p>Para cualquier consulta sobre tus datos, escríbenos por WhatsApp al {site.phoneDisplay}.</p>
+    </div>
+  </section>
+</Base>

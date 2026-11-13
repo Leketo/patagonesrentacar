@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import Mountains from '../components/Mountains.astro';
+import { parkRoutes, parkTips } from '../data/routes';
+import { findCar } from '../data/fleet';
+import { clp } from '../lib/format';
+---
+<Base
+  title="Rent a car para Torres del Paine desde Puerto Natales"
+  description="Rutas en Torres del Paine en auto propio: Base Torres, Circuito W, Glaciar Grey y Mirador Cuernos, con el auto recomendado para cada una. Arriendo en Puerto Natales."
+>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Guía de rutas</p>
+        <h1 class="display display-xl">Torres del Paine en tu propio auto.</h1>
+        <p class="lead">
+          Sales de Puerto Natales a la hora que quieras y llegas al parque en poco más de dos
+          horas. Aquí tienes qué auto conviene para cada ruta.
+        </p>
+      </div>
+      <div class="hero-art" style="min-height: 280px">
+        <Mountains />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" style="padding-top: 56px" aria-labelledby="rutas-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="rutas-titulo" class="display display-l">Rutas y auto recomendado</h2>
+      </div>
+      <div class="fleet-grid">
+        {
+          parkRoutes.map((route) => {
+            const car = route.carSlug ? findCar(route.carSlug) : undefined;
+            return (
+              <article class="car-card" id={route.slug}>
+                <div class="car-body">
+                  <span class="car-tag">{route.duration}</span>
+                  <h3>{route.name}</h3>
+                  <p class="car-specs">{route.detail}</p>
+                  <p class="car-price" style="margin-top: 4px">
+                    Recomendado: <strong style="font-family: var(--font-body); font-size: 1rem">{route.recommended}</strong>
+                  </p>
+                  {car && (
+                    <a class="btn btn-dark" href={`/flota/${car.slug}/`}>
+                      {car.name} · {clp(car.price)} por día
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="tips-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="tips-titulo" class="display display-l">Antes de salir</h2>
+      </div>
+      <ul class="check-list" style="max-width: 44rem">
+        {
+          parkTips.map((tip) => (
+            <li>
+              <Icon name="check" />
+              {tip}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand title="¿Armamos tu viaje?" message="Hola, vengo de patagonesrentacar.cl y quiero arrendar un auto para ir a Torres del Paine." />
+</Base>

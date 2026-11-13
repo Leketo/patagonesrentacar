@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import CarCard from '../../components/CarCard.astro';
+import Conditions from '../../components/Conditions.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { fleet, minPrice } from '../../data/fleet';
+import { clp } from '../../lib/format';
+---
+<Base
+  title="Flota de SUV automáticas en Puerto Natales"
+  description={`Subaru XV, Renault Duster, Suzuki Grand Nomade 4x4 y Kia Sorento de 7 asientos. Desde ${clp(minPrice)} por día con IVA incluido, seguro y kilometraje libre.`}
+>
+  <div class="container page-head">
+    <p class="eyebrow">Flota</p>
+    <h1 class="display display-xl">Cuatro SUV listas para la ruta.</h1>
+    <p class="lead">
+      Todas automáticas, con seguro incluido, kilometraje libre y entrega con el estanque lleno.
+    </p>
+  </div>
+
+  <section class="section section-light">
+    <div class="container">
+      <div class="fleet-grid">
+        {fleet.map((car) => <CarCard car={car} headingLevel="h2" />)}
+      </div>
+      <p class="fine-print">Precios por día con IVA incluido. La tarifa se ajusta desde dos días de arriendo.</p>
+    </div>
+  </section>
+
+  <section class="section section-light" style="padding-top: 0" aria-labelledby="cond-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="cond-titulo" class="display display-l">Condiciones</h2>
+      </div>
+      <Conditions />
+    </div>
+  </section>
+
+  <CtaBand title="¿Cuál te sirve?" message="Hola, vengo de patagonesrentacar.cl y quiero ayuda para elegir auto." />
+</Base>

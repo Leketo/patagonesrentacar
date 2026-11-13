@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import Conditions from '../components/Conditions.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { site, requirements, services } from '../data/site';
+
+const faqs = [
+  {
+    q: '¿Qué necesito para arrendar?',
+    a: `Cédula de identidad o pasaporte vigente, y licencia de conducir vigente a nombre de quien retira el auto. La edad mínima es de ${site.minAge} años.`,
+  },
+  {
+    q: '¿El precio incluye IVA y seguro?',
+    a: 'Sí. El precio por día que ves en el sitio incluye IVA y el seguro.',
+  },
+  {
+    q: '¿Hay límite de kilómetros?',
+    a: 'No. El kilometraje es libre: recorres la Patagonia sin sorpresas en el costo final.',
+  },
+  {
+    q: '¿Dónde retiro y devuelvo el auto?',
+    a: 'Te lo entregamos en el aeropuerto de Puerto Natales o en tu hotel. Lo coordinamos por WhatsApp.',
+  },
+  {
+    q: '¿Cómo cambia el precio si arriendo varios días?',
+    a: 'La tarifa se ajusta desde dos días de arriendo. Escríbenos con tus fechas y te enviamos el precio final.',
+  },
+  {
+    q: '¿Puedo agregar otro conductor?',
+    a: 'Sí, se pueden agregar conductores adicionales. Cada uno debe cumplir los mismos requisitos.',
+  },
+  {
+    q: '¿Qué pasa si tengo un problema en ruta?',
+    a: `Tienes asistencia en ruta las 24 horas. La atención para reservas es ${site.hours.toLowerCase()}.`,
+  },
+  {
+    q: '¿Qué debo saber para entrar a Torres del Paine?',
+    a: 'Los accesos al parque requieren entrada oficial, y dentro del parque el auto se deja solo en estacionamientos habilitados.',
+  },
+];
+---
+<Base
+  title="Condiciones y requisitos de arriendo"
+  description={`Requisitos para arrendar en Patagones Rent a Car: edad mínima ${site.minAge} años, licencia vigente, seguro incluido, kilometraje libre y precios con IVA incluido.`}
+>
+  <div class="container page-head">
+    <p class="eyebrow">Condiciones</p>
+    <h1 class="display display-xl">Claro desde el principio.</h1>
+    <p class="lead">Todo lo que necesitas saber antes de reservar, en una sola página.</p>
+  </div>
+
+  <section class="section section-light">
+    <div class="container">
+      <Conditions />
+    </div>
+  </section>
+
+  <section class="section section-light" style="padding-top: 0" aria-labelledby="req-titulo">
+    <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 40px">
+      <div>
+        <div class="section-head">
+          <h2 id="req-titulo" class="display display-l">Requisitos</h2>
+        </div>
+        <ul class="check-list">
+          {
+            requirements.map((r) => (
+              <li>
+                <Icon name="check" />
+                {r}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <div class="section-head">
+          <h2 class="display display-l">Incluido</h2>
+        </div>
+        <ul class="check-list">
+          {
+            services.map((s) => (
+              <li>
+                <Icon name="check" />
+                {s}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" style="padding-top: 0" aria-labelledby="faq-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="faq-titulo" class="display display-l">Preguntas frecuentes</h2>
+      </div>
+      <div class="faq">
+        {
+          faqs.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="¿Otra pregunta?" message="Hola, vengo de patagonesrentacar.cl y tengo una pregunta sobre las condiciones de arriendo." />
+</Base>

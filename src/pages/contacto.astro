@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import ConsultForm from '../components/ConsultForm.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+import { waLink } from '../lib/format';
+---
+<Base
+  title="Contacto y reservas"
+  description={`Consulta disponibilidad por WhatsApp al ${site.phoneDisplay}. Atención ${site.hours.toLowerCase()} en Puerto Natales.`}
+>
+  <div class="container page-head">
+    <p class="eyebrow">Contacto</p>
+    <h1 class="display display-xl">Hablemos por WhatsApp.</h1>
+    <p class="lead">Elige auto y fechas, y te respondemos con la disponibilidad y el precio final.</p>
+  </div>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container" style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
+      <div style="flex: 1 1 460px; min-width: 0">
+        <ConsultForm />
+      </div>
+      <div class="contact-grid" style="flex: 1 1 320px; min-width: 0; grid-template-columns: 1fr">
+        <div class="contact-card">
+          <h2>WhatsApp</h2>
+          <p>{site.phoneDisplay}</p>
+          <a class="btn btn-outline" href={waLink()} rel="noopener" style="align-self: flex-start">
+            <Icon name="whatsapp" size={18} />
+            Escribir ahora
+          </a>
+        </div>
+        <div class="contact-card">
+          <h2>Llamar</h2>
+          <p><a href={site.phoneHref}>{site.phoneDisplay}</a></p>
+        </div>
+        <div class="contact-card">
+          <h2>Horario</h2>
+          <p>{site.hours}. Asistencia en ruta las 24 horas.</p>
+        </div>
+        <div class="contact-card">
+          <h2>Dónde estamos</h2>
+          <p>{site.city}, {site.region}, {site.country}. Entregamos en el aeropuerto o en tu hotel.</p>
+        </div>
+        {
+          site.email && (
+            <div class="contact-card">
+              <h2>Correo</h2>
+              <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Base>

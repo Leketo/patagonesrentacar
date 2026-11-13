@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, requirements } from '../data/site';
+---
+<Base
+  title="Términos de uso"
+  description={`Términos de uso del sitio de ${site.name}.`}
+>
+  <div class="container page-head">
+    <p class="eyebrow">Legal</p>
+    <h1 class="display display-xl">Términos de uso</h1>
+  </div>
+
+  <section class="section" style="padding-top: 0">
+    <div class="container prose">
+      <p>
+        Este sitio informa sobre el servicio de arriendo de autos de {site.name} en {site.city},
+        {site.country}. No es una plataforma de reserva ni de pago: las consultas se responden
+        por WhatsApp y el arriendo se formaliza con un contrato al retirar el vehículo.
+      </p>
+
+      <h2>Precios y disponibilidad</h2>
+      <p>
+        Los precios publicados son por día, en pesos chilenos y con IVA incluido. La tarifa se
+        ajusta desde dos días de arriendo. La disponibilidad y el precio final se confirman por
+        WhatsApp antes de cada arriendo.
+      </p>
+
+      <h2>Requisitos</h2>
+      <ul>
+        {requirements.map((r) => <li>{r}</li>)}
+      </ul>
+
+      <h2>Contrato</h2>
+      <p>
+        Las condiciones completas del arriendo, incluidos el depósito en garantía, el seguro y
+        sus coberturas, y el uso del vehículo, son las que constan en el contrato que se firma al
+        retirar el auto.
+      </p>
+
+      <h2>Contacto</h2>
+      <p>WhatsApp {site.phoneDisplay} · {site.hours}.</p>
+    </div>
+  </section>
+</Base>
