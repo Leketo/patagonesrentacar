@@ -147,7 +147,7 @@ a:hover {
 
 /* Secciones */
 .section {
-  padding-block: 72px;
+  padding-block: 80px;
 }
 
 .section-light {
@@ -437,8 +437,9 @@ a:hover {
 
 .car-card img {
   width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--photo-bg);
 }
 
@@ -822,4 +823,121 @@ a:hover {
   .wa-float {
     display: none;
   }
+}
+
+/* Ruta: fotografía local, escala editorial y acentos del amanecer. */
+::selection { background: var(--dawn); color: var(--night); }
+[id] { scroll-margin-top: 24px; }
+.brand-mark { width: 42px; height: 38px; color: var(--glacier); flex-shrink: 0; }
+.brand .brand-name { font-size: 1.7rem; line-height: 1; letter-spacing: .045em; color: var(--snow); }
+.brand-name > span { display: block; margin-top: 7px; font-size: .65rem; letter-spacing: .18em; }
+.header-inner { padding-block: 20px; }
+.text-link { display: inline-flex; align-items: center; gap: 14px; min-height: 44px; font-weight: 600; text-underline-offset: 5px; }
+.text-link span { color: var(--dawn); }
+.expedition-hero { padding-top: 48px; overflow: hidden; }
+.expedition-grid { display: grid; gap: 48px; align-items: center; }
+.expedition-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+.expedition-copy h1 { font-size: clamp(3.4rem, 6.4vw, 6.6rem); max-width: 11ch; line-height: .94; }
+.expedition-copy h1 span { color: var(--dawn); }
+.expedition-copy .lead { max-width: 25rem; }
+.location-dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--glacier); vertical-align: 2px; }
+.hero-price { display: grid; grid-template-columns: auto auto; gap: 0 12px; align-items: baseline; margin: 0; color: var(--mist); font-size: .94rem; }
+.hero-price strong { grid-row: span 2; grid-column: 2; font: 700 3.1rem/.95 var(--font-display); color: var(--snow); }
+.hero-price > span { font-size: .8rem; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.hero-includes { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; color: var(--mist); font-size: .8rem; }
+.hero-includes li::before { content: '✓'; color: var(--glacier); margin-right: 6px; }
+.expedition-photo { position: relative; margin: 0; padding: 12px 0 0 12px; border-left: 1px solid var(--line); border-top: 1px solid var(--line); }
+.expedition-photo > img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; }
+.expedition-photo figcaption { display: flex; flex-direction: column; gap: 2px; padding-top: 16px; color: var(--mist); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+.expedition-photo figcaption strong { color: var(--snow); font-size: .85rem; }
+.photo-stamp { position: absolute; width: 100px; bottom: -4px; right: 0; opacity: .9; }
+.route-line { display: flex; align-items: center; gap: 18px; padding-block: 40px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; font-size: .65rem; }
+.route-line-track { flex: 1; height: 1px; background: linear-gradient(90deg, var(--dawn), var(--line)); position: relative; }
+.route-line-track::before, .route-line-track::after { content: ''; position: absolute; top: -3px; width: 7px; height: 7px; border: 1px solid var(--dawn); border-radius: 50%; background: var(--night); }
+.route-line-track::after { right: 0; border-color: var(--glacier); }
+.consult-section { display: grid; gap: 24px; padding-block: 28px 40px; border-block: 1px solid var(--line); }
+.consult-heading { display: flex; flex-direction: column; gap: 12px; }
+.consult-heading p:last-child { color: var(--muted); font-size: .9rem; margin: 0; }
+.consult { border: 1px solid var(--line); }
+.field input[aria-invalid='true'] { border-color: var(--dawn); outline-color: var(--dawn); }
+.section-head .eyebrow { margin-bottom: 14px; }
+.section-head-row { gap: 24px; }
+.section-head-row .text-link { flex-shrink: 0; align-self: flex-start; }
+.section-head-row .display + p { margin-top: 16px; max-width: 34rem; }
+.car-card { border-radius: 2px; background: var(--granite); color: var(--snow); }
+.car-card .car-specs, .car-card .car-price { color: var(--mist); }
+.car-card .car-price strong { color: var(--snow); }
+.car-card h2, .car-card h3 { font-family: var(--font-display); font-size: 1.85rem; text-transform: uppercase; line-height: 1; }
+.car-card .car-tag { background: transparent; color: var(--glacier); padding: 0; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; }
+.car-card .btn-dark { background: var(--dawn); color: var(--night); justify-content: space-between; margin-top: 8px; }
+.car-card .btn-dark:hover { background: #f6a15f; }
+.car-price > span { display: block; font-size: .8rem; margin-top: 2px; }
+.car-body { gap: 14px; }
+.car-detail-photo img { height: auto; object-fit: contain; }
+.section-light .fine-print { color: var(--ink-muted); }
+.section-light .eyebrow { color: #326661; }
+.section-light .car-card a:hover { color: var(--glacier); }
+.section-light .car-card .btn:hover { color: var(--night); }
+.condition { border-radius: 0; border-top: 2px solid #c9d5d5; padding: 18px 0; background: transparent; }
+.conditions { column-gap: 28px; }
+.condition dt { font-size: .7rem; }
+.route-card-link { text-decoration: none; border-radius: 0; border-width: 1px 0 0; padding: 24px 0; }
+.route-card-link:hover h3 { color: var(--glacier); }
+.route-index { font: 600 .8rem var(--font-body); color: var(--muted); letter-spacing: .1em; }
+.route-reco { display: flex; justify-content: space-between; gap: 12px; }
+.route-reco span { color: var(--dawn); }
+.steps-section { padding-top: 0; }
+.steps-section > .container { border-top: 1px solid var(--line); padding-top: 48px; }
+.steps li::before { font-size: 2.8rem; }
+.page-head { padding-block: 56px; }
+.page-head .display-xl { max-width: 15ch; }
+.cta-band .display { max-width: 18ch; }
+@media (min-width: 900px) {
+  .expedition-grid { grid-template-columns: 1fr 1.05fr; }
+  .expedition-photo { transform: rotate(-2deg); margin-right: -20px; }
+  .expedition-photo figcaption { transform: rotate(2deg); }
+  .consult-section { grid-template-columns: .75fr 1.8fr; align-items: center; padding-block: 32px; }
+  .consult-section .consult-grid { grid-template-columns: 1fr 1fr; }
+  .section-head-row { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+  .section-head-row .text-link { align-self: flex-end; }
+}
+@media (max-width: 760px) {
+  .header-inner { padding-block: 12px 0; gap: 10px; }
+  .brand-mark { width: 30px; height: 30px; }
+  .brand .brand-name { font-size: 1.4rem; }
+  .brand-name > span { font-size: .55rem; margin-top: 5px; }
+  .site-header .btn-outline { padding-inline: 10px; font-size: .8rem; min-height: 40px; }
+  .nav { gap: 18px; font-size: .8rem; justify-content: space-between; }
+  .nav a { min-height: 42px; }
+  .expedition-hero { padding-top: 30px; }
+  .expedition-grid { gap: 30px; }
+  .expedition-copy { gap: 18px; }
+  .expedition-copy h1 { font-size: 3.6rem; max-width: 13ch; }
+  .expedition-copy .lead { font-size: 1rem; }
+  .hero-price strong { font-size: 2.7rem; }
+  .hero-actions { width: 100%; gap: 8px; justify-content: space-between; }
+  .hero-actions .btn { width: 100%; justify-content: space-between; }
+  .hero-includes { gap: 4px 12px; font-size: .74rem; }
+  .route-line { padding-block: 28px; font-size: .54rem; gap: 10px; }
+  .section { padding-block: 48px; }
+  .consult-section { padding-block: 24px; }
+  .consult-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .field { min-width: 0; }
+  .field input, .field select { min-width: 0; padding-inline: 8px; font-size: .875rem; }
+  .consult-grid .field:nth-child(-n+2) { grid-column: 1 / -1; }
+  .field input[type='date'] { font-size: .8125rem; }
+  .hero { padding-block: 30px 40px; }
+  .hero-art { min-height: 200px !important; }
+  .car-detail { gap: 28px; }
+  .car-detail-photo, .car-detail-info { flex-basis: 100%; }
+  .page-head { padding-block: 32px; }
+  .display-xl { font-size: 3.6rem; }
+  .conditions { grid-template-columns: 1fr 1fr; column-gap: 20px; }
+  .condition dd { font-size: 1rem; }
+  .wa-float { bottom: max(12px, env(safe-area-inset-bottom)); width: 48px; height: 48px; }
+  .site-footer { padding-bottom: 80px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

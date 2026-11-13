@@ -5,91 +5,74 @@ import Conditions from '../components/Conditions.astro';
 import CarCard from '../components/CarCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Mountains from '../components/Mountains.astro';
-import { site } from '../data/site';
+import { site, services } from '../data/site';
 import { fleet, minPrice } from '../data/fleet';
 import { parkRoutes } from '../data/routes';
 import { clp } from '../lib/format';
+const featured = fleet[0];
 ---
 <Base
   title="Arriendo de autos en Puerto Natales y Torres del Paine | Patagones Rent a Car"
-  description={`SUV automáticas con seguro y kilometraje libre en Puerto Natales, desde ${clp(minPrice)} por día con IVA incluido. Entrega en el aeropuerto o en tu hotel. Consulta por WhatsApp.`}
+  description={`SUV automáticas en Puerto Natales desde ${clp(minPrice)} por día, IVA incluido. Seguro y kilometraje libre. Consulta por WhatsApp.`}
 >
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Puerto Natales · Patagonia chilena</p>
-        <h1 class="display display-xl">Tu auto listo para Torres del Paine.</h1>
-        <p class="lead">
-          {site.slogan} SUV automáticas con seguro y kilometraje libre, entregadas en el
-          aeropuerto o en tu hotel.
-        </p>
-        <ConsultForm />
-        <p class="hero-meta">{site.hours} · Desde {clp(minPrice)} por día, IVA incluido.</p>
+  <section class="expedition-hero" aria-labelledby="inicio-titulo">
+    <div class="container expedition-grid">
+      <div class="expedition-copy">
+        <p class="eyebrow"><span class="location-dot"></span>{site.city}, {site.country}</p>
+        <h1 id="inicio-titulo" class="display">La ruta es tuya.<br /><span>Torres del Paine</span> te espera.</h1>
+        <p class="lead">{site.slogan}</p>
+        <p class="hero-price">SUV automáticas desde <strong>{clp(minPrice)}</strong><span>por día · IVA incluido</span></p>
+        <div class="hero-actions">
+          <a class="btn btn-accent" href="#consulta">Consultar por WhatsApp <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="/flota/">Explorar la flota <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="hero-includes">{services.slice(0, 3).map((service) => <li>{service}</li>)}</ul>
       </div>
-      <div class="hero-art">
-        <Mountains />
-      </div>
+      <figure class="expedition-photo">
+        <img src={featured.image} alt={featured.imageAlt} width={featured.imageWidth} height={featured.imageHeight} fetchpriority="high" decoding="async" />
+        <figcaption><span>Tu viaje parte aquí</span><strong>{site.city} · Patagonia chilena</strong></figcaption>
+        <div class="photo-stamp" aria-hidden="true"><Mountains /></div>
+      </figure>
+    </div>
+    <div class="container route-line" aria-hidden="true"><span>Puerto Natales</span><span class="route-line-track"></span><span>Torres del Paine</span></div>
+  </section>
+
+  <section class="consult-section container" id="consulta" aria-labelledby="consulta-titulo">
+    <div class="consult-heading"><p class="eyebrow">Comienza tu viaje</p><h2 id="consulta-titulo" class="display display-m">Tu auto. Tus fechas.<br />Hablemos por WhatsApp.</h2><p>Consulta disponibilidad y precio final.<br />La confirmación es por WhatsApp.</p></div>
+    <ConsultForm />
+  </section>
+
+  <section class="section fleet-section" aria-labelledby="flota-titulo">
+    <div class="container">
+      <div class="section-head section-head-row"><div><p class="eyebrow">Elige tu compañero de ruta</p><h2 id="flota-titulo" class="display display-l">Cuatro autos.<br />Todo por descubrir.</h2></div><a class="text-link" href="/flota/">Comparar la flota <span aria-hidden="true">↗</span></a></div>
+      <div class="fleet-grid">{fleet.map((car) => <CarCard car={car} />)}</div>
+      <p class="fine-print">Precios por día con IVA incluido. La tarifa se ajusta desde dos días de arriendo.</p>
     </div>
   </section>
 
   <section class="section section-light" aria-labelledby="condiciones-titulo">
     <div class="container">
-      <div class="section-head">
-        <h2 id="condiciones-titulo" class="display display-l">Las condiciones, antes de que preguntes.</h2>
-      </div>
+      <div class="section-head"><p class="eyebrow">Viaja con las cosas claras</p><h2 id="condiciones-titulo" class="display display-l">Antes de salir,<br />todo a la vista.</h2></div>
       <Conditions />
-      <p class="fine-print"><a href="/condiciones/">Ver requisitos y preguntas frecuentes</a></p>
-    </div>
-  </section>
-
-  <section class="section section-light" style="padding-top: 0" aria-labelledby="flota-titulo">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="flota-titulo" class="display display-l">Nuestra flota</h2>
-        <p>Cuatro SUV automáticas. Entrega con estanque lleno y revisión previa al viaje.</p>
-      </div>
-      <div class="fleet-grid">
-        {fleet.map((car) => <CarCard car={car} />)}
-      </div>
-      <p class="fine-print">Precios por día con IVA incluido. La tarifa se ajusta desde dos días de arriendo.</p>
+      <p class="fine-print"><a href="/condiciones/">Ver requisitos y preguntas frecuentes <span aria-hidden="true">↗</span></a></p>
     </div>
   </section>
 
   <section class="section" aria-labelledby="rutas-titulo">
     <div class="container">
-      <div class="section-head">
-        <h2 id="rutas-titulo" class="display display-l">Rutas en Torres del Paine</h2>
-        <p>El parque queda a poco más de dos horas de Puerto Natales. Elige el auto según tu ruta.</p>
-      </div>
-      <div class="routes-grid">
-        {
-          parkRoutes.map((route) => (
-            <article class="route-card">
-              <h3>{route.name}</h3>
-              <p class="route-meta">{route.duration}</p>
-              <p class="route-reco">Recomendado: {route.recommended}</p>
-            </article>
-          ))
-        }
-      </div>
-      <p class="fine-print" style="color: var(--muted)">
-        <a href="/torres-del-paine/">Ver la guía de rutas</a>
-      </p>
+      <div class="section-head section-head-row"><div><p class="eyebrow">Desde Puerto Natales al parque</p><h2 id="rutas-titulo" class="display display-l">El destino lo eliges tú.</h2><p>El parque está a poco más de dos horas. Encuentra el auto para tu ruta.</p></div><a class="text-link" href="/torres-del-paine/">Guía de Torres del Paine <span aria-hidden="true">↗</span></a></div>
+      <div class="routes-grid">{parkRoutes.map((route, index) => <a class="route-card route-card-link" href={`/torres-del-paine/#${route.slug}`}><span class="route-index" aria-hidden="true">0{index + 1} /</span><h3>{route.name}</h3><p class="route-meta">{route.duration}</p><p class="route-reco">{route.recommended} <span aria-hidden="true">↗</span></p></a>)}</div>
     </div>
   </section>
 
-  <section class="section" style="padding-top: 0" aria-labelledby="pasos-titulo">
-    <div class="container" style="padding-top: 56px; border-top: 1px solid var(--line)">
-      <div class="section-head">
-        <h2 id="pasos-titulo" class="display display-l">Reserva en tres pasos</h2>
-      </div>
+  <section class="section steps-section" aria-labelledby="pasos-titulo">
+    <div class="container"><div class="section-head"><p class="eyebrow">Así de simple</p><h2 id="pasos-titulo" class="display display-l">De la consulta a la ruta.</h2></div>
       <ol class="steps">
-        <li><strong>Elige auto y fechas</strong><span>Ves el precio por día y las condiciones en la misma página.</span></li>
+        <li><strong>Elige auto y fechas</strong><span>Revisa precios y condiciones, y cuéntanos tu viaje.</span></li>
         <li><strong>Confirmamos por WhatsApp</strong><span>Te enviamos la disponibilidad y el precio final.</span></li>
         <li><strong>Recibe el auto</strong><span>En el aeropuerto o en tu hotel, con el estanque lleno.</span></li>
       </ol>
     </div>
   </section>
-
   <CtaBand />
 </Base>

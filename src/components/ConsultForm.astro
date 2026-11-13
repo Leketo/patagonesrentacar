@@ -1,123 +1,87 @@
 ---
-// Consulta de disponibilidad: arma el mensaje y abre WhatsApp.
-// No guarda ni envía datos a ningún servidor.
 import { fleet } from '../data/fleet';
 import { site } from '../data/site';
-import { clp } from '../lib/format';
-
-interface Props {
-  /** slug del auto preseleccionado */
-  selected?: string;
-}
+import { clp, waLink } from '../lib/format';
+interface Props { selected?: string; }
 const { selected } = Astro.props;
 ---
 <form class="consult" data-whatsapp={site.whatsapp} novalidate>
   <div class="consult-grid">
-    <div class="field">
-      <label for="c-auto">Auto</label>
-      <select id="c-auto" name="auto">
-        <option value="">Cualquiera disponible</option>
-        {
-          fleet.map((car) => (
-            <option value={`${car.name} ${car.year}`} selected={car.slug === selected}>
-              {car.name} · {clp(car.price)}
-            </option>
-          ))
-        }
-      </select>
-    </div>
-    <div class="field">
-      <label for="c-retiro">Retiro</label>
-      <select id="c-retiro" name="retiro">
-        <option>Aeropuerto de Puerto Natales</option>
-        <option>Hotel en Puerto Natales</option>
-        <option>Otro lugar (lo indico en el chat)</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="c-desde">Desde</label>
-      <input id="c-desde" name="desde" type="date" required />
-    </div>
-    <div class="field">
-      <label for="c-hasta">Hasta</label>
-      <input id="c-hasta" name="hasta" type="date" required />
-    </div>
+    <div class="field"><label for="c-auto">Tu auto</label><select id="c-auto" name="auto"><option value="">Ayúdenme a elegir</option>{fleet.map((car) => <option value={`${car.name} ${car.year}`} selected={car.slug === selected}>{car.name} · {clp(car.price)}/día</option>)}</select></div>
+    <div class="field"><label for="c-retiro">Lugar de retiro</label><select id="c-retiro" name="retiro"><option>Aeropuerto de Puerto Natales</option><option>Hotel en Puerto Natales</option><option>Otro lugar (lo indico en el chat)</option></select></div>
+    <div class="field"><label for="c-desde">Fecha de retiro</label><input id="c-desde" name="desde" type="date" required aria-describedby="c-note" /></div>
+    <div class="field"><label for="c-hasta">Fecha de devolución</label><input id="c-hasta" name="hasta" type="date" required aria-describedby="c-note" /></div>
   </div>
-  <button type="submit" class="btn btn-accent btn-lg">Consultar disponibilidad</button>
-  <p class="consult-note" aria-live="polite">
-    Te respondemos por WhatsApp con el precio final. Sin pago en línea.
-  </p>
+  <button type="submit" class="btn btn-accent">Consultar por WhatsApp <span aria-hidden="true">↗</span></button>
+  <p id="c-note" class="consult-note" aria-live="polite">Te respondemos con disponibilidad y precio final. Sin pago en línea.</p>
+  <noscript><p class="consult-note">Para consultar con fechas, activa JavaScript o <a href={waLink()}>escríbenos directamente por WhatsApp</a>.</p></noscript>
 </form>
 
 <script>
-  const DEFAULT_NOTE = 'Te respondemos por WhatsApp con el precio final. Sin pago en línea.';
-
-  function toLocal(iso: string): string {
-    const [y, m, d] = iso.split('-');
-    return `${d}-${m}-${y}`;
-  }
-
-  function todayIso(): string {
+  const DEFAULT_NOTE = 'Te respondemos con disponibilidad y precio final. Sin pago en línea.';
+  const localToday = () => {
     const now = new Date();
-    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    return local.toISOString().slice(0, 10);
-  }
-
-  function daysBetween(a: string, b: string): number {
-    const ms = Date.parse(`${b}T12:00:00`) - Date.parse(`${a}T12:00:00`);
-    return Math.round(ms / 86400000);
-  }
-
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  };
+  // UTC avoids daylight-saving changes when counting calendar days.
+  const dayNumber = (value: string) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return NaN;
+    const [y, m, d] = value.split('-').map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    return date.toISOString().slice(0, 10) === value ? date.getTime() / 86400000 : NaN;
+  };
+  const displayDate = (iso: string) => iso.split('-').reverse().join('-');
   document.querySelectorAll<HTMLFormElement>('form.consult').forEach((form) => {
-    const phone = form.dataset.whatsapp ?? '';
-    const desde = form.querySelector<HTMLInputElement>('[name="desde"]');
-    const hasta = form.querySelector<HTMLInputElement>('[name="hasta"]');
-    const auto = form.querySelector<HTMLSelectElement>('[name="auto"]');
-    const retiro = form.querySelector<HTMLSelectElement>('[name="retiro"]');
-    const note = form.querySelector<HTMLElement>('.consult-note');
-    if (!desde || !hasta || !auto || !retiro || !note) return;
-
-    const today = todayIso();
-    desde.min = today;
-    hasta.min = today;
-
-    const update = () => {
-      if (desde.value) hasta.min = desde.value;
-      if (desde.value && hasta.value) {
-        const days = daysBetween(desde.value, hasta.value);
-        note.textContent =
-          days > 0
-            ? `${days} ${days === 1 ? 'día' : 'días'} de arriendo. Te respondemos por WhatsApp con el precio final.`
-            : 'La fecha de devolución debe ser posterior a la de retiro.';
-      } else {
-        note.textContent = DEFAULT_NOTE;
+    const desde = form.querySelector<HTMLInputElement>('[name="desde"]')!;
+    const hasta = form.querySelector<HTMLInputElement>('[name="hasta"]')!;
+    const auto = form.querySelector<HTMLSelectElement>('[name="auto"]')!;
+    const retiro = form.querySelector<HTMLSelectElement>('[name="retiro"]')!;
+    const note = form.querySelector<HTMLElement>('.consult-note')!;
+    desde.min = localToday();
+    hasta.min = localToday();
+    const validate = (focus = false) => {
+      desde.removeAttribute('aria-invalid');
+      hasta.removeAttribute('aria-invalid');
+      const start = dayNumber(desde.value);
+      const end = dayNumber(hasta.value);
+      let field: HTMLInputElement | undefined;
+      let message = '';
+      if (!Number.isFinite(start)) { field = desde; message = 'Elige una fecha de retiro válida.'; }
+      else if (desde.value < localToday()) { field = desde; message = 'La fecha de retiro no puede estar en el pasado.'; }
+      else if (!Number.isFinite(end)) { field = hasta; message = 'Elige una fecha de devolución válida.'; }
+      else if (end <= start) { field = hasta; message = 'La devolución debe ser posterior al retiro.'; }
+      if (field) {
+        if (focus || (desde.value && hasta.value)) {
+          field.setAttribute('aria-invalid', 'true');
+          note.textContent = message;
+          if (focus) field.focus();
+        } else note.textContent = DEFAULT_NOTE;
+        return false;
       }
+      const days = end - start;
+      note.textContent = `${days} ${days === 1 ? 'día' : 'días'} de arriendo. Confirmamos disponibilidad y precio final por WhatsApp.`;
+      return true;
     };
-    desde.addEventListener('change', update);
-    hasta.addEventListener('change', update);
-
+    const update = () => {
+      desde.min = localToday();
+      hasta.min = desde.value && desde.value >= localToday() ? desde.value : localToday();
+      validate();
+    };
+    desde.addEventListener('input', update);
+    hasta.addEventListener('input', update);
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      if (!desde.value || !hasta.value) {
-        note.textContent = 'Elige las fechas de retiro y devolución.';
-        (desde.value ? hasta : desde).focus();
-        return;
-      }
-      const days = daysBetween(desde.value, hasta.value);
-      if (days <= 0) {
-        note.textContent = 'La fecha de devolución debe ser posterior a la de retiro.';
-        hasta.focus();
-        return;
-      }
+      if (!validate(true)) return;
+      const days = dayNumber(hasta.value) - dayNumber(desde.value);
       const lines = [
-        'Hola, vengo de patagonesrentacar.cl y quiero consultar disponibilidad.',
-        `Auto: ${auto.value || 'cualquiera disponible'}`,
+        'Hola, vengo de patagonesrentacar.cl y quiero consultar disponibilidad en Puerto Natales, Chile.',
+        `Auto: ${auto.value || 'necesito ayuda para elegir'}`,
         `Retiro: ${retiro.value}`,
-        `Desde: ${toLocal(desde.value)}`,
-        `Hasta: ${toLocal(hasta.value)} (${days} ${days === 1 ? 'día' : 'días'})`,
+        `Desde: ${displayDate(desde.value)}`,
+        `Hasta: ${displayDate(hasta.value)} (${days} ${days === 1 ? 'día' : 'días'})`,
+        '¿Me confirman disponibilidad y precio final?',
       ];
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(lines.join('\n'))}`;
-      window.location.href = url;
+      window.location.href = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     });
   });
 </script>
