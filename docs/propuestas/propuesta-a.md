@@ -413,8 +413,8 @@ auto**, un tercero, así que no se publica; **$128.000 por día con IVA incluido
 `src/data/fleet.ts`: Chevrolet Colorado 2022, camioneta 4x4 doble cabina, mecánica, $128.000
 por día con IVA. Es el primer auto de la flota que no es SUV y el primero que no es automático.
 
-**Queda pendiente de confirmar con el dueño:** los **cinco asientos** salen de que es doble
-cabina, no de un dato que él haya dado. Si son otros, se cambia una línea.
+Los **cinco asientos** se dedujeron de que es doble cabina; **el dueño los confirmó** en la
+vuelta siguiente, así que ya no son un dato pendiente.
 
 ## La foto
 
@@ -438,15 +438,14 @@ mintiendo. La lista de nombres de la descripción de `/flota/` también sale de 
 el conteo no aportaba nada se sacó ("Las mismas condiciones para todos"), y donde el sitio
 usaba "SUV automáticas" como categoría del negocio ahora dice "autos y camionetas".
 
-**Los distintivos.** `badge()` pone "La camioneta" antes que "La 4x4", porque ahora hay dos 4x4
-y si no dos tarjetas dirían lo mismo. El **Duster deja de ser "la más nueva"** —el Colorado es
-de 2022— y **queda sin distintivo**, que es preferible a inventarle uno; su línea pasa a *"La
-SUV más nueva de la flota"*, que sí es cierta.
+**Los distintivos.** El Colorado toma "La camioneta". El **Duster deja de ser "la más
+nueva"** —el Colorado es de 2022— y **queda sin distintivo**, que es preferible a inventarle
+uno; su línea pasa a *"La SUV más nueva de la flota"*, que sí es cierta. Lo del Suzuki y la
+reja se terminó de resolver en la vuelta siguiente: ver más abajo.
 
-**Una cosa que el PO puede querer mirar:** a 1440 px la reja de la flota entra en cuatro
-columnas, así que el quinto auto queda solo en la segunda fila. Con seis quedaría parejo. No
-lo forcé porque bajar el ancho mínimo de tarjeta para que entren cinco columnas las deja en
-228 px y las fotos se ven peor. Captura `10`.
+**Una cosa que el PO puede querer mirar:** a 1440 px la reja de la flota entraba en cuatro
+columnas, así que el quinto auto quedaba solo en la segunda fila. Captura `10`. **Resuelto
+en la vuelta siguiente**, punto 4.
 
 ---
 
@@ -500,3 +499,114 @@ Colorado y el punto de salida de la navegación al Glaciar Grey.
 - **El botón flotante**, si se quiere llegar a cero roces: ver el punto g.
 - **El lockfile** (QA 3.11) fija Astro 5.18.2 con un aviso crítico abierto, no explotable en
   un sitio estático. No lo subí: el encargo dice que la versión de Astro no se cambia.
+
+---
+
+# Decisiones del PO sobre las correcciones
+
+Tercera vuelta, 13-11-2026. Cuatro puntos. `npm run build` 13 páginas y `npm run check`
+0/0/0, y todo lo medido es sobre la salida compilada servida por `npm run preview`.
+
+## 1. Botón flotante: queda como está
+
+Decisión del PO. **No se tocó.** Siguen en pie los 11 roces de cola de renglón en el primer
+pliegue de cuatro páginas que quedaron descritos en el punto g, y el inicio sigue limpio a
+390 y a 360 px en el pliegue y al final.
+
+**Verificado** después de los otros tres cambios, para que no se hubiera movido nada:
+mismas 13 páginas, mismos dos anchos, **mismos 11 roces**, ninguno nuevo.
+
+## 2. Colorado: cinco asientos confirmados
+
+`src/data/fleet.ts`. Sale el comentario *"Doble cabina: cinco asientos. Pendiente de que el
+dueño lo confirme."*. El dato no cambia —siguen siendo cinco—, cambia que ya no es una
+deducción mía sino un dato del dueño. En el informe de la vuelta anterior también quedó
+anotado.
+
+## 3. Ningún auto dice ser la única 4x4
+
+Con el Colorado adentro hay **dos** 4x4, y el Suzuki seguía afirmando ser la única en dos
+lugares:
+
+| Dónde | Antes | Ahora |
+|---|---|---|
+| `bestFor` del Suzuki | *"La 4x4 de la flota: la mejor opción para ripio y Base Torres."* | *"SUV 4x4 automática: la mejor opción para ripio y Base Torres."* |
+| Distintivo del Suzuki (`badge()`) | `La 4x4` | `SUV 4x4` |
+| Comentario de la regla de distintivos | "(la más barata, la 4x4, la de siete asientos)" | al día, y dice que un distintivo no puede afirmar ser el único de su clase si no lo es |
+
+El distintivo del Colorado, **"La camioneta", sí es único** y queda igual: es la única
+camioneta de la flota.
+
+**Barrido de `src/` buscando "4x4"**, que es lo que pidió el PO. Lo que queda, todo cierto:
+
+- `type: 'SUV 4x4'` (Suzuki) y `type: 'Camioneta 4x4'` (Colorado): son los tipos de auto.
+- `bestFor` del Colorado: *"La camioneta de la flota: doble cabina, 4x4 y espacio de carga
+  atrás."* Dice que es la camioneta, no que sea la única 4x4.
+- `recommended: 'SUV o 4x4'` en `src/data/routes.ts`: es dato de rutas, no se toca.
+
+**Verificado** sobre la salida compilada: la cadena *"La 4x4"* no aparece en ninguna de las
+13 páginas.
+
+## 4. La reja de la flota no deja un auto solo
+
+`src/components/Flota.astro` (nuevo), `src/lib/format.ts` y `src/styles/global.css`.
+
+**El problema.** El número de columnas salía del ancho disponible
+(`repeat(auto-fill, minmax(260px, 1fr))`): a 1440 px entraban cuatro y el quinto auto quedaba
+solo en la segunda fila. Pero no se puede simplemente fijar tres columnas, porque la sección
+*"Los otros cuatro"* de cada ficha muestra **cuatro** tarjetas y ahí tres columnas dejan un
+3 + 1, que es el mismo defecto.
+
+**La solución.** El número de columnas deja de salir del ancho y pasa a salir de **cuántos
+autos hay**: `columnas(n, maximo)` elige la mayor que no deja un solo auto en la última fila.
+Con cinco autos y hasta cuatro columnas devuelve 3 (3 + 2) en vez de 4 (4 + 1); con cuatro
+autos y hasta tres devuelve 2 (2 + 2) en vez de 3 (3 + 1).
+
+La reja pasa de `grid` a `flex` porque **una última fila incompleta en grid no se puede
+centrar**. Con la fila llena, centrar no mueve nada, así que las rejas que ya se veían bien
+no cambian.
+
+`Flota.astro` reúne los tres lugares que dibujaban la reja a mano —portada, `/flota/` y la
+ficha—, así que el reparto se decide en uno solo y no puede quedar desparejo entre páginas.
+
+**Verificado** en `/`, `/flota/` y la ficha del Sorento, a **390, 768, 1024 y 1440 px**,
+contando las tarjetas de cada fila y midiendo si la última quedó centrada:
+
+| | 390 px | 768 px | 1024 px | 1440 px |
+|---|---|---|---|---|
+| **5 autos** (portada y `/flota/`) | 1+1+1+1+1 | 2 + 2 + 1 | **3 + 2** | **3 + 2** |
+| **4 autos** (ficha, "los otros") | 1+1+1+1 | 2 + 2 | **2 + 2** | **4** |
+
+- En escritorio (1024 y 1440) **ninguna fila queda con un solo auto**, ni con cinco ni con
+  cuatro. Capturas `12` y `13`.
+- Toda fila incompleta queda **centrada**, medido comparando el margen izquierdo y el derecho
+  de la última fila contra la caja de la reja (diferencia ≤ 2 px).
+- A 768 px con cinco autos queda **2 + 2 + 1**, con el último centrado. Es tableta, no
+  escritorio: la única alternativa era bajar a una columna, que es peor.
+- El ancho de tarjeta cambia donde cambió el reparto: 288 → 389 px en la reja de cinco a
+  1440 px, y 297 → 453 px en la ficha a 1024 px. Las fotos no se amplían por esto más de lo
+  que ya hacían; `widthsUpTo()` sigue impidiendo que Astro genere versiones más grandes que
+  el original.
+
+## Que nada se haya roto en el camino
+
+Toda la batería de la vuelta anterior, corrida de nuevo sobre esta:
+
+| Qué | Resultado |
+|---|---|
+| `npm run build` | 13 páginas, sin errores |
+| `npm run check` | 0 errores, 0 avisos, 0 sugerencias (28 archivos) |
+| Accesibilidad, 13 páginas × 390/360/1440 | **0 hallazgos** en las 39 combinaciones |
+| Scroll horizontal | 0 px en las 39 |
+| Blancos de toque ≥ 44 px | sin excepciones a 390 y 360 |
+| Botón flotante | los **mismos 11 roces** de antes, ninguno nuevo |
+| Formulario de punta a punta | **12 de 12** casos, más el auto preelegido desde la ficha |
+| Títulos y descripciones | 13/13 ≤ 60 y 13/13 ≤ 155, todos únicos |
+| Enlaces internos | 13 destinos, todos 200. `/no-existe/` → 404 |
+
+## Capturas de esta vuelta
+
+| Archivo | Qué muestra |
+|---|---|
+| `12-reja-tres-mas-dos-1440.webp` | `/flota/` a 1440 px: 3 + 2 con la segunda fila centrada, y el distintivo "SUV 4x4" |
+| `13-reja-ficha-dos-mas-dos-1024.webp` | "Los otros cuatro" de una ficha a 1024 px: 2 + 2, sin 3 + 1 |
