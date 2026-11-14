@@ -62,8 +62,12 @@ const schema = [
   },
 ];
 ---
+<!-- El título se cierra con " | Patagones Rent a Car", que son 23 caracteres:
+     al nombre del auto le quedan 37 para no pasar de 60, que es donde corta
+     Google. El más largo de la flota, "Arriendo de Suzuki Grand Nomade 2017",
+     mide 36. Si entra un auto con nombre más largo, hay que acortar aquí. -->
 <Base
-  title={`${car.name} ${car.year} en Puerto Natales`}
+  title={`Arriendo de ${car.name} ${car.year}`}
   description={`${car.name} ${car.year}, ${car.type} de ${car.seats} pasajeros. ${clp(car.price)} por día con IVA, seguro y kilometraje libre. Entrega en el aeropuerto o en tu hotel.`}
   image={car.photo.src}
   imageAlt={car.photoAlt}
