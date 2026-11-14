@@ -6,6 +6,20 @@ export function clp(value: number): string {
   return '$' + Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+/**
+ * 5 -> "cinco". Los textos que cuentan autos se arman con esto y con
+ * fleet.length, no a mano: así entrar un auto nuevo no deja al sitio diciendo
+ * "los cuatro autos" cuando ya son cinco. Hasta diez alcanza de sobra.
+ */
+const NUMEROS = [
+  'cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco',
+  'seis', 'siete', 'ocho', 'nueve', 'diez',
+];
+
+export function enLetras(n: number): string {
+  return NUMEROS[n] ?? String(n);
+}
+
 /** Enlace de WhatsApp con mensaje prellenado. */
 export function waLink(text: string = site.waDefault): string {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;

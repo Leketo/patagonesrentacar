@@ -5,17 +5,20 @@ import Condiciones from '../../components/Condiciones.astro';
 import Cierre from '../../components/Cierre.astro';
 import { fleet, minPrice } from '../../data/fleet';
 import { site } from '../../data/site';
-import { clp } from '../../lib/format';
+import { clp, enLetras } from '../../lib/format';
+
+// La lista sale de los datos: si entra un auto, aparece aquí solo.
+const nombres = fleet.map((c) => c.name).join(', ');
 ---
 <Base
-  title="Flota: cuatro SUV automáticas"
-  description={`Subaru XV, Renault Duster, Suzuki Grand Nomade 4x4 y Kia Sorento de siete asientos. Desde ${clp(minPrice)} por día con IVA, seguro y kilometraje libre.`}
+  title={`Flota: ${enLetras(fleet.length)} autos en Puerto Natales`}
+  description={`${nombres}. Desde ${clp(minPrice)} por día con IVA, seguro y kilometraje libre.`}
 >
   <div class="contenedor encabezado-pagina">
-    <h1 class="titular titular--pagina">Cuatro SUV listas para la ruta</h1>
+    <h1 class="titular titular--pagina">{enLetras(fleet.length)} autos listos para la ruta</h1>
     <p class="bajada">
-      Todas automáticas, con seguro y kilometraje libre, y el estanque lleno al retirar.
-      Elige por precio, por asientos o por la ruta que vas a hacer.
+      Con seguro y kilometraje libre, y el estanque lleno al retirar. Elige por precio,
+      por asientos o por la ruta que vas a hacer.
     </p>
   </div>
 
@@ -34,7 +37,7 @@ import { clp } from '../../lib/format';
   <section class="seccion seccion--granito" aria-labelledby="t-condiciones">
     <div class="contenedor">
       <div class="cabeza-seccion">
-        <h2 id="t-condiciones" class="titular titular--seccion">Las mismas condiciones para los cuatro</h2>
+        <h2 id="t-condiciones" class="titular titular--seccion">Las mismas condiciones para todos</h2>
       </div>
       <Condiciones />
       <p class="letra-chica tras-bloque">

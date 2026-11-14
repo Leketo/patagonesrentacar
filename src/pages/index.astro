@@ -9,20 +9,20 @@ import Icono from '../components/Icono.astro';
 import { site } from '../data/site';
 import { fleet, minPrice } from '../data/fleet';
 import { parkRoutes } from '../data/routes';
-import { clp, waLink } from '../lib/format';
+import { clp, enLetras, waLink } from '../lib/format';
 import portada from '../assets/portada/puerto-natales-subaru.jpg';
 ---
 <Base
   title="Arriendo de autos en Puerto Natales | Patagones Rent a Car"
-  description={`SUV automáticas para Torres del Paine desde ${clp(minPrice)} por día con IVA, seguro y kilometraje libre. Entrega en el aeropuerto de Puerto Natales o en tu hotel.`}
+  description={`Autos y camionetas para Torres del Paine desde ${clp(minPrice)} por día con IVA, seguro y kilometraje libre. Entrega en el aeropuerto o en tu hotel.`}
 >
   <section class="seccion hero">
     <div class="hero__reja">
       <div class="hero__texto">
         <h1 class="titular titular--portada">Tu auto listo para Torres del Paine</h1>
         <p class="bajada">
-          SUV automáticas con seguro y kilometraje libre, entregadas en el aeropuerto de
-          {site.city} o en tu hotel.
+          Autos y camionetas con seguro y kilometraje libre, entregados en el aeropuerto
+          de {site.city} o en tu hotel.
         </p>
       </div>
 
@@ -60,10 +60,11 @@ import portada from '../assets/portada/puerto-natales-subaru.jpg';
   <section class="seccion" id="flota" aria-labelledby="t-flota">
     <div class="contenedor">
       <div class="cabeza-seccion">
-        <h2 id="t-flota" class="titular titular--seccion">Los cuatro autos, con su precio</h2>
+        <h2 id="t-flota" class="titular titular--seccion">
+          Los {enLetras(fleet.length)} autos, con su precio
+        </h2>
         <p>
-          Todas automáticas. Precio por día con IVA incluido: el que ves es el que te
-          cotizamos.
+          Precio por día con IVA incluido: el que ves es el que te cotizamos.
         </p>
       </div>
 

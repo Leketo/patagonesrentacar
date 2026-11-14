@@ -601,7 +601,7 @@ ol {
   overflow: hidden;
 }
 
-/* Marco de foto: proporción fija 3:2 para las cuatro. Las fotos ya vienen
+/* Marco de foto: proporción fija 3:2 para todas. Las fotos ya vienen
    recortadas a 3:2 desde scripts/procesar-fotos.mjs, así que aquí `contain`
    no recorta nada. Se usa `contain` y no `cover` a propósito: si algún día
    entra una foto con otra proporción, preferimos que se vea entera con dos
@@ -626,7 +626,7 @@ ol {
   flex-grow: 1;
 }
 
-/* El precio arriba y en la misma posición en las cuatro tarjetas: así se
+/* El precio arriba y en la misma posición en todas las tarjetas: así se
    comparan de un vistazo, que es justo donde falla la competencia. */
 .auto__precio {
   display: flex;

@@ -7,7 +7,7 @@ import Icono from '../../components/Icono.astro';
 import Condiciones from '../../components/Condiciones.astro';
 import { fleet, badge, type Car } from '../../data/fleet';
 import { site, services } from '../../data/site';
-import { clp, routesForCar, widthsUpTo } from '../../lib/format';
+import { clp, enLetras, routesForCar, widthsUpTo } from '../../lib/format';
 
 export function getStaticPaths() {
   return fleet.map((car) => ({ params: { slug: car.slug }, props: { car } }));
@@ -182,7 +182,7 @@ const schema = [
   <section class="seccion seccion--granito" aria-labelledby="t-otros">
     <div class="contenedor">
       <div class="cabeza-seccion">
-        <h2 id="t-otros" class="titular titular--seccion">Los otros tres</h2>
+        <h2 id="t-otros" class="titular titular--seccion">Los otros {enLetras(otros.length)}</h2>
       </div>
       <div class="flota">
         {otros.map((c) => <TarjetaAuto car={c} />)}
