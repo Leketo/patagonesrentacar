@@ -78,22 +78,38 @@ const { selected, papel = false, id = 'consulta' } = Astro.props;
     return `${d}-${m}-${a}`;
   }
 
+  /**
+   * Día calendario de una fecha ISO, contado desde 1970, o NaN si la cadena
+   * no es una fecha que exista de verdad. El viaje de ida y vuelta por
+   * Date.UTC caza el 31 de abril y el 30 de febrero, que Date.parse acepta
+   * corriéndolos al mes siguiente. Se cuenta en UTC: así el resultado no
+   * depende del cambio de hora de Chile.
+   */
+  function dia(iso: string): number {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return NaN;
+    const [a, m, d] = iso.split('-').map(Number);
+    const t = Date.UTC(a, m - 1, d);
+    const f = new Date(t);
+    if (f.getUTCFullYear() !== a || f.getUTCMonth() !== m - 1 || f.getUTCDate() !== d) {
+      return NaN;
+    }
+    return t / 86400000;
+  }
+
+  /** La fecha de hoy en la zona horaria del visitante, en formato ISO. */
   function hoyIso(): string {
     const ahora = new Date();
     const local = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000);
     return local.toISOString().slice(0, 10);
   }
 
-  function masDias(iso: string, dias: number): string {
-    const d = new Date(`${iso}T12:00:00`);
-    d.setDate(d.getDate() + dias);
-    return d.toISOString().slice(0, 10);
+  function deDia(n: number): string {
+    return new Date(n * 86400000).toISOString().slice(0, 10);
   }
 
-  function dias(a: string, b: string): number {
-    return Math.round(
-      (Date.parse(`${b}T12:00:00`) - Date.parse(`${a}T12:00:00`)) / 86400000,
-    );
+  function masDias(iso: string, dias: number): string {
+    const n = dia(iso);
+    return Number.isFinite(n) ? deDia(n + dias) : '';
   }
 
   document.querySelectorAll<HTMLFormElement>('form.consulta').forEach((form) => {
@@ -105,12 +121,24 @@ const { selected, papel = false, id = 'consulta' } = Astro.props;
     const aviso = form.querySelector<HTMLElement>('.consulta__aviso');
     if (!desde || !hasta || !auto || !retiro || !aviso) return;
 
-    const hoy = hoyIso();
-    const tope = masDias(hoy, 365);
-    desde.min = hoy;
-    desde.max = tope;
-    hasta.min = hoy;
-    hasta.max = tope;
+    // "Hoy" se recalcula cada vez que se mira el formulario, no una sola vez al
+    // cargar: quien deja la pestaña abierta de un día para otro no puede
+    // terminar pidiendo una fecha que ya pasó.
+    let hoy = dia(hoyIso());
+    let tope = hoy + 365;
+
+    function actualizarTopes() {
+      hoy = dia(hoyIso());
+      tope = hoy + 365;
+      desde!.min = deDia(hoy);
+      desde!.max = deDia(tope);
+      hasta!.min = desde!.value && dia(desde!.value) >= hoy
+        ? masDias(desde!.value, 1)
+        : deDia(hoy);
+      hasta!.max = deDia(tope);
+    }
+
+    actualizarTopes();
 
     function decir(texto: string, esError = false) {
       aviso!.textContent = texto;
@@ -128,25 +156,92 @@ const { selected, papel = false, id = 'consulta' } = Astro.props;
     // Al elegir el retiro, la devolución no puede ser antes. Y si todavía no
     // hay devolución, se propone el día siguiente: un clic menos.
     function alCambiarDesde() {
-      if (!desde!.value) return;
-      hasta!.min = masDias(desde!.value, 1);
-      if (!hasta!.value || hasta!.value <= desde!.value) {
-        hasta!.value = masDias(desde!.value, 1);
+      actualizarTopes();
+      const siguiente = masDias(desde!.value, 1);
+      if (siguiente && (!hasta!.value || hasta!.value <= desde!.value)) {
+        hasta!.value = siguiente;
       }
       repasar();
     }
 
+    /**
+     * Un solo lugar donde se decide si las fechas sirven. Devuelve el campo que
+     * falla y qué decirle a quien lo escribió, o los días de arriendo si todo
+     * está bien. Lo usan por igual el repaso en vivo y el envío, así que no
+     * pueden opinar distinto.
+     *
+     * `falta` separa "todavía no lo llenaste" de "lo llenaste mal": lo primero
+     * no es un error mientras se escribe, pero sí lo es al enviar.
+     */
+    function revisar(): { campo?: HTMLInputElement; mensaje?: string; falta?: boolean; n?: number } {
+      actualizarTopes();
+
+      if (!desde!.value) {
+        return { campo: desde!, mensaje: 'Falta la fecha en que retiras el auto.', falta: true };
+      }
+      if (!hasta!.value) {
+        return { campo: hasta!, mensaje: 'Falta la fecha en que devuelves el auto.', falta: true };
+      }
+
+      // Lo primero, antes de contar días: que las dos fechas existan. Si no,
+      // la resta daría NaN y el mensaje saldría con "Son NaN días".
+      const d0 = dia(desde!.value);
+      const d1 = dia(hasta!.value);
+      if (!Number.isFinite(d0)) {
+        return { campo: desde!, mensaje: 'Revisa la fecha de retiro: no es una fecha válida.' };
+      }
+      if (!Number.isFinite(d1)) {
+        return { campo: hasta!, mensaje: 'Revisa la fecha de devolución: no es una fecha válida.' };
+      }
+
+      if (d0 < hoy) {
+        return { campo: desde!, mensaje: 'La fecha de retiro no puede estar en el pasado.' };
+      }
+      if (d0 > tope) {
+        return {
+          campo: desde!,
+          mensaje: 'Tomamos consultas hasta un año adelante. Para más allá, escríbenos por WhatsApp.',
+        };
+      }
+      if (d1 > tope) {
+        return {
+          campo: hasta!,
+          mensaje: 'Tomamos consultas hasta un año adelante. Para más allá, escríbenos por WhatsApp.',
+        };
+      }
+
+      const n = d1 - d0;
+      if (n <= 0) {
+        return {
+          campo: hasta!,
+          mensaje: 'La fecha de devolución tiene que ser posterior a la de retiro.',
+        };
+      }
+
+      // Red de seguridad: lo que el propio navegador piensa de los campos,
+      // con min y max ya puestos al día. Si discrepa con lo de arriba, manda
+      // el navegador y no se envía nada.
+      for (const campo of [desde!, hasta!]) {
+        if (!campo.validity.valid) {
+          return { campo, mensaje: 'Revisa las fechas: alguna queda fuera del rango que atendemos.' };
+        }
+      }
+
+      return { n };
+    }
+
     function repasar() {
+      const r = revisar();
       marcar(null);
-      if (!desde!.value || !hasta!.value) {
+      if (r.falta) {
         decir(AVISO);
         return;
       }
-      const n = dias(desde!.value, hasta!.value);
-      if (n <= 0) {
-        decir('La fecha de devolución tiene que ser posterior a la de retiro.', true);
+      if (r.mensaje) {
+        decir(r.mensaje, true);
         return;
       }
+      const n = r.n!;
       const plural = n === 1 ? 'día' : 'días';
       decir(
         n >= 2
@@ -162,22 +257,13 @@ const { selected, papel = false, id = 'consulta' } = Astro.props;
     form.addEventListener('submit', (evento) => {
       evento.preventDefault();
 
-      if (!desde.value) {
-        decir('Falta la fecha en que retiras el auto.', true);
-        marcar(desde);
+      const r = revisar();
+      if (r.mensaje) {
+        decir(r.mensaje, true);
+        marcar(r.campo ?? null);
         return;
       }
-      if (!hasta.value) {
-        decir('Falta la fecha en que devuelves el auto.', true);
-        marcar(hasta);
-        return;
-      }
-      const n = dias(desde.value, hasta.value);
-      if (n <= 0) {
-        decir('La fecha de devolución tiene que ser posterior a la de retiro.', true);
-        marcar(hasta);
-        return;
-      }
+      const n = r.n!;
 
       const elegido = auto.selectedOptions[0];
       const precio = elegido?.dataset.precio;
