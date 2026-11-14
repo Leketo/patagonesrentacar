@@ -60,7 +60,9 @@ export const fleet: Car[] = [
     price: 70000,
     photo: suzukiGrandNomade,
     photoAlt: 'Suzuki Grand Nomade 2017 café, de tres cuartos, sobre gravilla',
-    bestFor: 'La 4x4 de la flota: la mejor opción para ripio y Base Torres.',
+    // Dejó de ser "la 4x4 de la flota" cuando entró el Colorado, que también
+    // lo es. Lo que sigue siendo cierto y la distingue: es la SUV 4x4.
+    bestFor: 'SUV 4x4 automática: la mejor opción para ripio y Base Torres.',
   },
   {
     slug: 'kia-sorento-2011',
@@ -102,10 +104,10 @@ export function findCar(slug: string): Car | undefined {
  */
 export function badge(car: Car): string | undefined {
   if (car.price === minPrice) return 'La más económica';
-  // La camioneta va antes que la 4x4 porque las dos son 4x4: si no, dos
-  // tarjetas dirían lo mismo y el distintivo dejaría de distinguir.
+  // Hay dos 4x4 en la flota, así que ninguna puede decir "La 4x4": eso
+  // afirmaría que es la única. Cada una dice lo que la distingue de la otra.
   if (car.type.includes('Camioneta')) return 'La camioneta';
-  if (car.type.includes('4x4')) return 'La 4x4';
+  if (car.type.includes('4x4')) return 'SUV 4x4';
   if (car.seats >= 7) return `${car.seats} asientos`;
   if (car.year === Math.max(...fleet.map((c) => c.year))) return 'La más nueva';
   return undefined;

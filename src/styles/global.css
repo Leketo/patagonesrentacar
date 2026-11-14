@@ -686,8 +686,9 @@ ol {
   margin-top: var(--e2);
 }
 
-/* Distintivo: solo cuando sale de un dato real (la más barata, la 4x4, la de
-   siete asientos). Nunca un adorno. */
+/* Distintivo: solo cuando sale de un dato real (la más barata, la camioneta,
+   la SUV 4x4, la de siete asientos). Nunca un adorno, y nunca algo que
+   afirme ser el único de su clase si no lo es. */
 .distintivo {
   align-self: flex-start;
   padding: 3px var(--e2);
