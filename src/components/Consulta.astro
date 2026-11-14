@@ -46,20 +46,36 @@ const { selected, papel = false, id = 'consulta' } = Astro.props;
 
     <div class="campo">
       <label for={`${id}-desde`}>Lo retiras el</label>
-      <input id={`${id}-desde`} name="desde" type="date" required />
+      <input
+        id={`${id}-desde`}
+        name="desde"
+        type="date"
+        required
+        aria-describedby={`${id}-aviso`}
+      />
     </div>
 
     <div class="campo">
       <label for={`${id}-hasta`}>Lo devuelves el</label>
-      <input id={`${id}-hasta`} name="hasta" type="date" required />
+      <input
+        id={`${id}-hasta`}
+        name="hasta"
+        type="date"
+        required
+        aria-describedby={`${id}-aviso`}
+      />
     </div>
   </div>
 
-  <button type="submit" class="boton boton--luz boton--grande">Consultar por WhatsApp</button>
-
-  <p class="consulta__aviso" role="status">
+  <!-- El aviso va ANTES del botón: si va debajo, en el teléfono el error
+       aparece fuera de pantalla justo cuando se pulsa. Y los dos campos de
+       fecha lo declaran con aria-describedby, así que quien vuelve al campo
+       con un lector de pantalla no solo oye "no válido": oye por qué. -->
+  <p id={`${id}-aviso`} class="consulta__aviso" role="status">
     Te respondemos con la disponibilidad y el precio final. No se paga nada en línea.
   </p>
+
+  <button type="submit" class="boton boton--luz boton--grande">Consultar por WhatsApp</button>
 
   <noscript>
     <p class="consulta__aviso">
@@ -140,7 +156,15 @@ const { selected, papel = false, id = 'consulta' } = Astro.props;
 
     actualizarTopes();
 
+    // Un error de envío interrumpe (role="alert"); el conteo de días espera su
+    // turno (role="status"). El rol se cambia con la región vacía, para que el
+    // lector de pantalla lo tome antes de encontrar el texto nuevo.
     function decir(texto: string, esError = false) {
+      const rol = esError ? 'alert' : 'status';
+      if (aviso!.getAttribute('role') !== rol) {
+        aviso!.textContent = '';
+        aviso!.setAttribute('role', rol);
+      }
       aviso!.textContent = texto;
       aviso!.classList.toggle('consulta__aviso--error', esError);
     }
