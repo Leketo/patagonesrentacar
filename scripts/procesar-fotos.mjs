@@ -36,7 +36,7 @@ const DESTINO = path.join(raiz, 'src', 'assets');
  * encuadre: recorte final. 'alto' recorta arriba/abajo desde 'y';
  *           'ancho' recorta a los lados desde 'x'.
  * tapar:   rectangulos a pixelar, en coordenadas de la foto YA encuadrada.
- *          Se usa para las patentes. Una sola regla para las cuatro fotos:
+ *          Se usa para las patentes. Una sola regla para todas las fotos:
  *          si la patente se lee, se tapa.
  */
 const trabajos = [
@@ -56,6 +56,19 @@ const trabajos = [
   // del auto, una aparentemente menor de edad. El original se queda en ../img,
   // pero no se copia al repo ni se publica. El Sorento usa la del
   // estacionamiento, sin personas.
+  // El Colorado llego con dos fotos: la de tres cuartos (20.48.31) y una
+  // trasera (20.48.30). Se publica la de tres cuartos, que es el encuadre que
+  // usan las otras de la flota. La trasera no se copia al repo: no hay donde
+  // mostrarla sin armar una galeria, y ademas su patente se lee entera.
+  // En la que si se publica, la patente delantera no entra en cuadro, no se ve
+  // ninguna persona, y la patente de la camioneta roja del fondo no se lee ni
+  // ampliandola. El recorte deja esa camioneta fuera igual.
+  {
+    origen: 'WhatsApp Image 2026-11-13 at 20.48.31.jpeg',
+    destino: 'flota/chevrolet-colorado.jpg',
+    nota: 'Colorado de tres cuartos. 3:2 cerrado sobre el auto, sin la camioneta roja del fondo.',
+    encuadre: { x: 200, y: 160, ancho: 1080, alto: 720 },
+  },
   {
     origen: 'WhatsApp Image 2026-11-13 at 14.12.48.jpeg',
     destino: 'flota/kia-sorento.jpg',
@@ -93,9 +106,9 @@ const yaEnRepo = [
   {
     origen: path.join(raiz, 'src', 'fotos-originales', 'renault-duster.jpg'),
     destino: 'flota/renault-duster.jpg',
-    // La foto mide 300x168 y es la peor de las cuatro. Igual se encuadra a 3:2
+    // La foto mide 300x168 y es la peor de todas. Igual se encuadra a 3:2
     // como las demas, porque el PO pidio que se vean parejas: dejarla con
-    // franjas la delataba al lado de las otras tres. Queda en 252 px de ancho,
+    // franjas la delataba al lado de las demas. Queda en 252 px de ancho,
     // que en la tarjeta (288 px) se amplia 1.14x y aguanta.
     nota: 'La mas chica de todas. Se encuadra 3:2 igual, para que la tarjeta no desentone.',
     encuadre: { x: 20, y: 0, ancho: 252, alto: 168 },

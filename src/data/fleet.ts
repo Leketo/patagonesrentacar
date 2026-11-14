@@ -6,6 +6,7 @@ import subaruXv from '../assets/flota/subaru-xv.jpg';
 import renaultDuster from '../assets/flota/renault-duster.jpg';
 import suzukiGrandNomade from '../assets/flota/suzuki-grand-nomade.jpg';
 import kiaSorento from '../assets/flota/kia-sorento.jpg';
+import chevroletColorado from '../assets/flota/chevrolet-colorado.jpg';
 
 export interface Car {
   slug: string;
@@ -46,7 +47,8 @@ export const fleet: Car[] = [
     price: 68000,
     photo: renaultDuster,
     photoAlt: 'Renault Duster 2019 blanco, estacionado al borde de un camino',
-    bestFor: 'El modelo más reciente de la flota, para cinco pasajeros.',
+    // Dejó de ser "el más reciente de la flota" cuando entró el Colorado 2022.
+    bestFor: 'La SUV más nueva de la flota, para cinco pasajeros.',
   },
   {
     slug: 'suzuki-grand-nomade-2017',
@@ -72,6 +74,20 @@ export const fleet: Car[] = [
     photoAlt: 'Kia Sorento 2011 plata, de perfil, en un estacionamiento techado',
     bestFor: 'Siete asientos: grupos y familias con equipaje.',
   },
+  {
+    slug: 'chevrolet-colorado-2022',
+    name: 'Chevrolet Colorado',
+    year: 2022,
+    type: 'Camioneta 4x4',
+    // Doble cabina: cinco asientos. Pendiente de que el dueño lo confirme.
+    seats: 5,
+    transmission: 'Mecánica',
+    price: 128000,
+    photo: chevroletColorado,
+    photoAlt:
+      'Chevrolet Colorado 2022 plateada, doble cabina, de tres cuartos sobre gravilla',
+    bestFor: 'La camioneta de la flota: doble cabina, 4x4 y espacio de carga atrás.',
+  },
 ];
 
 export const minPrice = Math.min(...fleet.map((c) => c.price));
@@ -82,11 +98,14 @@ export function findCar(slug: string): Car | undefined {
 
 /**
  * Distintivo de la tarjeta. Sale de los datos de arriba, no se escribe a mano:
- * así nunca dice algo que los datos no respalden, y las cuatro tarjetas dicen
+ * así nunca dice algo que los datos no respalden, y las tarjetas dicen
  * cosas distintas en vez de repetir "ruta y parque".
  */
 export function badge(car: Car): string | undefined {
   if (car.price === minPrice) return 'La más económica';
+  // La camioneta va antes que la 4x4 porque las dos son 4x4: si no, dos
+  // tarjetas dirían lo mismo y el distintivo dejaría de distinguir.
+  if (car.type.includes('Camioneta')) return 'La camioneta';
   if (car.type.includes('4x4')) return 'La 4x4';
   if (car.seats >= 7) return `${car.seats} asientos`;
   if (car.year === Math.max(...fleet.map((c) => c.year))) return 'La más nueva';
