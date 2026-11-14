@@ -361,10 +361,13 @@ ol {
   padding-block: var(--e3);
 }
 
+/* 44 px de alto, aunque el texto de la marca mida 36: el encargo pide ese
+   blanco de toque para todo lo que se pulsa. */
 .marca {
   display: flex;
   align-items: center;
   gap: var(--e3);
+  min-height: 44px;
   margin-right: auto;
   text-decoration: none;
 }
@@ -439,7 +442,7 @@ ol {
   }
 
   .menu a {
-    min-height: 40px;
+    min-height: 44px;
     font-size: var(--t-xs);
   }
 
@@ -782,13 +785,18 @@ ol {
   list-style: none;
 }
 
-/* Blanco de toque de 24 px para las migas: son enlaces sueltos y cortos, no
-   enlaces dentro de una frase. */
+/* Blanco de toque de 44 px para las migas. El aire que eso agrega se descuenta
+   con el margen negativo de la lista: el blanco de toque crece, pero la línea
+   de migas se sigue viendo a la misma altura y el titular no se mueve. */
 .migas a,
 .migas span {
   display: inline-flex;
   align-items: center;
-  min-height: 24px;
+  min-height: 44px;
+}
+
+.migas ol {
+  margin-block: -10px;
 }
 
 .migas a {
@@ -1295,8 +1303,18 @@ ol {
 .pie__enlaces a {
   display: flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   text-decoration: none;
+}
+
+/* Los datos de contacto son enlaces dentro de una frase ("Teléfono +56 9…").
+   Suben a 44 px de alto sin estirar el pie: como caja en línea, el margen
+   negativo descuenta de la línea el aire que agrega el blanco de toque. */
+.pie__bloque .enlace {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -10px;
 }
 
 .pie__enlaces a:hover {
