@@ -79,7 +79,6 @@ export const fleet: Car[] = [
     name: 'Chevrolet Colorado',
     year: 2022,
     type: 'Camioneta 4x4',
-    // Doble cabina: cinco asientos. Pendiente de que el dueño lo confirme.
     seats: 5,
     transmission: 'Mecánica',
     price: 128000,
