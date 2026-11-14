@@ -23,6 +23,12 @@ interface Props {
   image?: string;
   imageAlt?: string;
   noindex?: boolean;
+  /**
+   * Declarar la canónica. El 404 la pasa en false: en el servidor se sirve
+   * como /404.html para cualquier ruta que no existe, así que la URL que
+   * Astro deduce de su ruta de compilación no va a existir en línea.
+   */
+  canonica?: boolean;
   /** Datos estructurados extra de la página (preguntas, migas, auto). */
   schema?: unknown[];
 }
@@ -33,11 +39,12 @@ const {
   image,
   imageAlt = 'Subaru XV de Patagones Rent a Car en la costanera de Puerto Natales, con la cordillera al fondo',
   noindex = false,
+  canonica = true,
   schema = [],
 } = Astro.props;
 
 const tituloCompleto = title.includes(site.name) ? title : `${title} | ${site.name}`;
-const canonica = new URL(Astro.url.pathname, Astro.site).toString();
+const urlCanonica = new URL(Astro.url.pathname, Astro.site).toString();
 const imagenRedes = new URL(image ?? portada.src, Astro.site).toString();
 
 // El negocio. Se declara una vez y se repite en todas las páginas: es el mismo.
@@ -94,7 +101,7 @@ const datos = [negocio, ...schema];
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloCompleto}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonica} />
+    {canonica && <link rel="canonical" href={urlCanonica} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0E1A22" />
@@ -105,7 +112,7 @@ const datos = [negocio, ...schema];
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={tituloCompleto} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonica} />
+    <meta property="og:url" content={urlCanonica} />
     <meta property="og:image" content={imagenRedes} />
     <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
