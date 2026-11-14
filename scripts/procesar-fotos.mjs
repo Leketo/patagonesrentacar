@@ -35,6 +35,9 @@ const DESTINO = path.join(raiz, 'src', 'assets');
  *          pantalla, antes de encuadrar.
  * encuadre: recorte final. 'alto' recorta arriba/abajo desde 'y';
  *           'ancho' recorta a los lados desde 'x'.
+ * tapar:   rectangulos a pixelar, en coordenadas de la foto YA encuadrada.
+ *          Se usa para las patentes. Una sola regla para las cuatro fotos:
+ *          si la patente se lee, se tapa.
  */
 const trabajos = [
   {
@@ -79,8 +82,13 @@ const yaEnRepo = [
   {
     origen: path.join(raiz, 'src', 'fotos-originales', 'suzuki-grand-nomade.jpg'),
     destino: 'flota/suzuki-grand-nomade.jpg',
-    nota: 'Se recorta gravilla de abajo, no cielo de arriba: el techo del auto llega al borde superior.',
+    nota: 'Se recorta gravilla de abajo, no cielo de arriba: el techo llega al borde. Patente pixelada.',
     encuadre: { x: 0, y: 0, ancho: 640, alto: 427 },
+    // Era la unica patente legible de la flota: en el Subaru no hay patente
+    // delantera, y en el Duster y la panoramica vienen tapadas desde el
+    // original. El original de ../img y el de src/fotos-originales/ no se
+    // tocan: lo que se pixela es la copia publicada.
+    tapar: [{ x: 93, y: 203, ancho: 70, alto: 52 }],
   },
   {
     origen: path.join(raiz, 'src', 'fotos-originales', 'renault-duster.jpg'),
@@ -94,7 +102,33 @@ const yaEnRepo = [
   },
 ];
 
-async function procesar({ origen, destino, extraer, encuadre, nota }) {
+/**
+ * Pixela los rectangulos indicados: baja cada region a unos pocos pixeles y la
+ * vuelve a subir sin interpolar. Lo que queda no se puede reconstruir, y se ve
+ * que esta tapado a proposito, que es justo lo que se quiere con una patente.
+ */
+async function taparRegiones(img, regiones) {
+  const base = await img.toBuffer();
+  const piezas = [];
+  for (const r of regiones) {
+    // Las dos pasadas van separadas a proposito: sharp aplica un solo resize
+    // por canalizacion, asi que encadenarlos deja sin efecto al primero y la
+    // patente saldria intacta.
+    const chico = await sharp(base)
+      .extract({ left: r.x, top: r.y, width: r.ancho, height: r.alto })
+      .resize({ width: Math.max(2, Math.round(r.ancho / 12)), kernel: 'nearest' })
+      .png()
+      .toBuffer();
+    const parche = await sharp(chico)
+      .resize({ width: r.ancho, height: r.alto, fit: 'fill', kernel: 'nearest' })
+      .png()
+      .toBuffer();
+    piezas.push({ input: parche, left: r.x, top: r.y });
+  }
+  return sharp(await sharp(base).composite(piezas).toBuffer());
+}
+
+async function procesar({ origen, destino, extraer, encuadre, tapar, nota }) {
   const salida = path.join(DESTINO, destino);
   await mkdir(path.dirname(salida), { recursive: true });
 
@@ -113,6 +147,9 @@ async function procesar({ origen, destino, extraer, encuadre, nota }) {
       width: encuadre.ancho,
       height: encuadre.alto,
     });
+  }
+  if (tapar) {
+    img = await taparRegiones(img, tapar);
   }
 
   const info = await img
