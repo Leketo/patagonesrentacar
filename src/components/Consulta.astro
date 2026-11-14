@@ -14,76 +14,97 @@ interface Props {
   id?: string;
 }
 const { selected, papel = false, id = 'consulta' } = Astro.props;
+
+// Sin JavaScript se da vuelta el bloque: desaparece el formulario y aparece el
+// enlace a WhatsApp, que sí funciona.
+const sinJs = '<style>.consulta__js{display:none}.consulta__sin-js{display:flex}</style>';
 ---
 <form class:list={['consulta', papel && 'consulta--papel']} data-wasap={site.whatsapp} novalidate>
-  <div class="consulta__reja">
-    <div class="campo">
-      <label for={`${id}-auto`}>Auto</label>
-      <select id={`${id}-auto`} name="auto">
-        <option value="">El que esté disponible</option>
-        {
-          fleet.map((car) => (
-            <option
-              value={`${car.name} ${car.year}`}
-              data-precio={clp(car.price)}
-              selected={car.slug === selected}
-            >
-              {car.name} {car.year} — {clp(car.price)}
-            </option>
-          ))
-        }
-      </select>
+  <!-- Todo lo que depende de JavaScript vive dentro de .consulta__js y se
+       esconde entero cuando no lo hay: un formulario que no puede armar el
+       mensaje es un formulario que engaña. -->
+  <div class="consulta__js">
+    <div class="consulta__reja">
+      <div class="campo">
+        <label for={`${id}-auto`}>Auto</label>
+        <select id={`${id}-auto`} name="auto">
+          <option value="">El que esté disponible</option>
+          {
+            fleet.map((car) => (
+              <option
+                value={`${car.name} ${car.year}`}
+                data-precio={clp(car.price)}
+                selected={car.slug === selected}
+              >
+                {car.name} {car.year} — {clp(car.price)}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for={`${id}-retiro`}>Dónde lo retiras</label>
+        <select id={`${id}-retiro`} name="retiro">
+          <option>Aeropuerto de Puerto Natales</option>
+          <option>Mi hotel en Puerto Natales</option>
+          <option>Otro lugar, lo coordinamos por chat</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for={`${id}-desde`}>Lo retiras el</label>
+        <input
+          id={`${id}-desde`}
+          name="desde"
+          type="date"
+          required
+          aria-describedby={`${id}-aviso`}
+        />
+      </div>
+
+      <div class="campo">
+        <label for={`${id}-hasta`}>Lo devuelves el</label>
+        <input
+          id={`${id}-hasta`}
+          name="hasta"
+          type="date"
+          required
+          aria-describedby={`${id}-aviso`}
+        />
+      </div>
     </div>
 
-    <div class="campo">
-      <label for={`${id}-retiro`}>Dónde lo retiras</label>
-      <select id={`${id}-retiro`} name="retiro">
-        <option>Aeropuerto de Puerto Natales</option>
-        <option>Mi hotel en Puerto Natales</option>
-        <option>Otro lugar, lo coordinamos por chat</option>
-      </select>
-    </div>
+    <!-- El aviso va ANTES del botón: si va debajo, en el teléfono el error
+         aparece fuera de pantalla justo cuando se pulsa. Y los dos campos de
+         fecha lo declaran con aria-describedby, así que quien vuelve al campo
+         con un lector de pantalla no solo oye "no válido": oye por qué. -->
+    <p id={`${id}-aviso`} class="consulta__aviso" role="status">
+      Te respondemos con la disponibilidad y el precio final. No se paga nada en línea.
+    </p>
 
-    <div class="campo">
-      <label for={`${id}-desde`}>Lo retiras el</label>
-      <input
-        id={`${id}-desde`}
-        name="desde"
-        type="date"
-        required
-        aria-describedby={`${id}-aviso`}
-      />
-    </div>
-
-    <div class="campo">
-      <label for={`${id}-hasta`}>Lo devuelves el</label>
-      <input
-        id={`${id}-hasta`}
-        name="hasta"
-        type="date"
-        required
-        aria-describedby={`${id}-aviso`}
-      />
-    </div>
+    <button type="submit" class="boton boton--luz boton--grande">Consultar por WhatsApp</button>
   </div>
 
-  <!-- El aviso va ANTES del botón: si va debajo, en el teléfono el error
-       aparece fuera de pantalla justo cuando se pulsa. Y los dos campos de
-       fecha lo declaran con aria-describedby, así que quien vuelve al campo
-       con un lector de pantalla no solo oye "no válido": oye por qué. -->
-  <p id={`${id}-aviso`} class="consulta__aviso" role="status">
-    Te respondemos con la disponibilidad y el precio final. No se paga nada en línea.
-  </p>
+  <!-- El navegador solo aplica este <style> si los scripts están apagados, así
+       que la página no cambia de aspecto ni se mueve cuando sí los hay. Va con
+       set:html para que el compilador de Astro no lo recoja como hoja del
+       componente y lo deje siempre activo. -->
+  <noscript set:html={sinJs} />
 
-  <button type="submit" class="boton boton--luz boton--grande">Consultar por WhatsApp</button>
-
-  <noscript>
-    <p class="consulta__aviso">
-      Para armar el mensaje con tus fechas hace falta JavaScript.
-      <a class="enlace" href={waLink()} rel="noopener">Escríbenos directo por WhatsApp</a>
-      y lo vemos por chat.
+  <div class="consulta__sin-js">
+    <p>
+      Para armar el mensaje con tus fechas hace falta JavaScript, y lo tienes
+      desactivado. Vamos directo al chat:
     </p>
-  </noscript>
+    <a class="boton boton--luz boton--grande" href={waLink()} rel="noopener">
+      Consultar por WhatsApp
+    </a>
+    <p class="consulta__aviso">
+      Cuéntanos qué auto quieres y tus fechas. Te respondemos con la disponibilidad
+      y el precio final. No se paga nada en línea.
+    </p>
+  </div>
 </form>
 
 <script>

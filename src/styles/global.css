@@ -1006,6 +1006,25 @@ ol {
   color: var(--tinta);
 }
 
+/* El formulario y su reemplazo sin JavaScript: siempre uno de los dos. El que
+   se ve por omisión es el formulario; un <style> dentro de <noscript> da vuelta
+   el par cuando los scripts están apagados. Así no hay parpadeo ni salto de
+   diseño en el caso normal, que es el que mide el CLS. */
+.consulta__js,
+.consulta__sin-js {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e4);
+}
+
+.consulta__sin-js {
+  display: none;
+}
+
+.consulta__sin-js .boton {
+  align-self: flex-start;
+}
+
 /* 220 px de mínimo por columna: con menos, los <select> cortan su opción más
    larga ("Aeropuerto de Puerto Natales") y no se entiende qué dicen. Así el
    formulario va a 4 columnas en el ancho completo, a 2 en media página y a 1
