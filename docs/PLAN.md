@@ -56,14 +56,16 @@ El turista quiere saber en segundos: **qué auto, cuánto cuesta, qué incluye y
 
 ### Contenido confirmado (no inventar más)
 
-| Auto | Tipo | Pasajeros | Precio/día (IVA incl.) |
-|---|---|---|---|
-| Subaru XV 2016 | SUV | 5 | $62.000 |
-| Renault Duster 2019 | SUV | 5 | $68.000 |
-| Suzuki Grand Nomade 2017 | SUV 4x4 | 5 | $70.000 |
-| Kia Sorento 2011 | SUV | 7 | $78.000 |
+| Auto | Tipo | Pasajeros | Transmisión | Precio/día (IVA incl.) |
+|---|---|---|---|---|
+| Subaru XV 2016 | SUV | 5 | Automática | $62.000 |
+| Renault Duster 2019 | SUV | 5 | Automática | $68.000 |
+| Suzuki Grand Nomade 2017 | SUV 4x4 | 5 | Automática | $70.000 |
+| Kia Sorento 2011 | SUV | 7 | Automática | $78.000 |
+| Chevrolet Colorado 2022 | Camioneta 4x4 doble cabina | 5 | Mecánica | $128.000 |
 
-- Todas automáticas. La tarifa se ajusta desde dos días de arriendo.
+- El Colorado se agregó el 13-11-2026 con datos confirmados por el dueño. Los textos del sitio cuentan los autos desde `fleet.ts`; no escribir "cuatro autos" ni "todas automáticas" a mano.
+- La tarifa se ajusta desde dos días de arriendo.
 - Edad mínima 21 años. Seguro incluido. Kilometraje libre. Estanque lleno. Entrega en aeropuerto u hotel. Conductores adicionales. Asistencia en ruta 24/7.
 - Rutas (según el dueño): Base Torres, Circuito W, Glaciar Grey, Mirador Cuernos y Salto Grande. El parque está a poco más de dos horas.
 - **Pendientes** (se muestran como "Consúltanos" hasta que lleguen): depósito, cruce a Argentina, cancelación, correo.
@@ -76,7 +78,7 @@ El turista quiere saber en segundos: **qué auto, cuánto cuesta, qué incluye y
 ## 4. Pendientes del dueño
 
 - Depósito, cruce a Argentina, cancelación.
-- Fotos nuevas del Duster (hoy 300 × 168 px) y del Sorento (captura con marca de agua). Ideal: todas en la zona, más interior y maletero.
+- Fotos nuevas del Duster (hoy muy baja resolución) y del Sorento (la actual es de un estacionamiento techado). Ideal: todas en la zona, más interior y maletero. Sin personas en las fotos y con la patente tapada.
 - Foto de un auto con el paisaje para la portada.
 - Logo y correo.
 - Verificar el punto de salida de la navegación al Glaciar Grey.
