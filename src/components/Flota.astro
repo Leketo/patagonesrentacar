@@ -1,0 +1,24 @@
+---
+// La reja de tarjetas de auto. Existe como componente para que el número de
+// columnas se decida en un solo lugar: sale de cuántos autos se van a mostrar,
+// así que nunca queda uno solo en la última fila, ni en la portada con cinco
+// ni en la ficha con cuatro.
+import TarjetaAuto from './TarjetaAuto.astro';
+import type { Car } from '../data/fleet';
+import { columnas } from '../lib/format';
+
+interface Props {
+  autos: Car[];
+  /** h2 en la página de flota, h3 cuando la reja cuelga de otra sección. */
+  nivel?: 'h2' | 'h3';
+}
+const { autos, nivel = 'h3' } = Astro.props;
+
+// Dos tramos de escritorio: hasta tres columnas en pantallas medianas y hasta
+// cuatro en las anchas. El teléfono y la tableta no entran aquí.
+const media = columnas(autos.length, 3);
+const ancha = columnas(autos.length, 4);
+---
+<div class="flota" style={`--cols-media:${media};--cols-ancha:${ancha}`}>
+  {autos.map((car) => <TarjetaAuto car={car} nivel={nivel} />)}
+</div>

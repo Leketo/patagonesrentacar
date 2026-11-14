@@ -586,10 +586,41 @@ ol {
 
 /* ------------------------------------------------- Tarjeta de auto (flota) */
 
+/* Reja de autos. Va en flex y no en grid porque la última fila tiene que poder
+   quedar centrada cuando no se llena: con cinco autos en tres columnas, los
+   dos de abajo van al medio y no pegados a la izquierda.
+   El número de columnas no lo decide el ancho disponible sino cuántos autos
+   hay: lo calcula columnas() en Flota.astro, para que nunca quede uno solo en
+   la última fila. Con una sola fila llena, centrar no mueve nada. */
 .flota {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--e4);
-  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  --cols: 1;
+}
+
+.flota > * {
+  flex: 0 1 calc((100% - (var(--cols) - 1) * var(--e4)) / var(--cols));
+  min-width: 0;
+}
+
+@media (min-width: 700px) {
+  .flota {
+    --cols: 2;
+  }
+}
+
+@media (min-width: 1000px) {
+  .flota {
+    --cols: var(--cols-media, 3);
+  }
+}
+
+@media (min-width: 1200px) {
+  .flota {
+    --cols: var(--cols-ancha, 4);
+  }
 }
 
 .auto {

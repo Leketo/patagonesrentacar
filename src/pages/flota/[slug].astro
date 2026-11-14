@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Consulta from '../../components/Consulta.astro';
-import TarjetaAuto from '../../components/TarjetaAuto.astro';
+import Flota from '../../components/Flota.astro';
 import Icono from '../../components/Icono.astro';
 import Condiciones from '../../components/Condiciones.astro';
 import { fleet, badge, type Car } from '../../data/fleet';
@@ -184,9 +184,7 @@ const schema = [
       <div class="cabeza-seccion">
         <h2 id="t-otros" class="titular titular--seccion">Los otros {enLetras(otros.length)}</h2>
       </div>
-      <div class="flota">
-        {otros.map((c) => <TarjetaAuto car={c} />)}
-      </div>
+      <Flota autos={otros} />
     </div>
   </section>
 </Base>

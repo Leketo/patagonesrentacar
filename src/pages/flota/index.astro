@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import TarjetaAuto from '../../components/TarjetaAuto.astro';
+import Flota from '../../components/Flota.astro';
 import Condiciones from '../../components/Condiciones.astro';
 import Cierre from '../../components/Cierre.astro';
 import { fleet, minPrice } from '../../data/fleet';
@@ -24,9 +24,7 @@ const nombres = fleet.map((c) => c.name).join(', ');
 
   <section class="seccion seccion--pegada" aria-label="Autos disponibles">
     <div class="contenedor">
-      <div class="flota">
-        {fleet.map((car) => <TarjetaAuto car={car} nivel="h2" />)}
-      </div>
+      <Flota autos={fleet} nivel="h2" />
       <p class="letra-chica tras-bloque">
         Precios por día con IVA incluido. Desde dos días de arriendo la tarifa se ajusta:
         escríbenos con tus fechas y te enviamos el precio final.

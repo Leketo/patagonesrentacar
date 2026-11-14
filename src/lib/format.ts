@@ -35,6 +35,23 @@ export function routesForCar(slug: string) {
 }
 
 /**
+ * Columnas para la reja de autos: la mayor que cabe sin dejar **un solo auto**
+ * en la última fila. Con cinco autos y hasta cuatro columnas devuelve 3 (3 + 2)
+ * en vez de 4 (4 + 1); con cuatro autos y hasta tres columnas devuelve 2
+ * (2 + 2) en vez de 3 (3 + 1).
+ *
+ * Si ninguna reparte bien —cinco autos en dos columnas, por ejemplo— devuelve
+ * el máximo: antes de quedar en una sola columna, mejor la fila corta. Por eso
+ * solo se usa de dos columnas para arriba.
+ */
+export function columnas(n: number, maximo: number): number {
+  for (let c = Math.min(maximo, n); c >= 2; c--) {
+    if (n <= c || n % c !== 1) return c;
+  }
+  return maximo;
+}
+
+/**
  * Anchos para astro:assets, recortados al ancho real de la foto.
  * Sin esto Astro amplía las fotos chicas (la del Duster mide 300 px) y las
  * deja borrosas. Nunca se pide más de lo que la foto tiene.
