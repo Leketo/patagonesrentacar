@@ -324,6 +324,15 @@ ol {
   padding-inline: var(--e6);
 }
 
+/* En el teléfono los botones grandes se ajustan a los costados: así terminan
+   antes de la columna del botón flotante de WhatsApp y los dos no se ven
+   encimados. El alto no cambia, que es lo que importa para el toque. */
+@media (max-width: 899px) {
+  .boton--grande {
+    padding-inline: var(--e4);
+  }
+}
+
 .boton--linea {
   border: 1.5px solid var(--linea);
   background: transparent;
@@ -522,6 +531,15 @@ ol {
   margin-top: var(--e3);
   font-size: var(--t-xs);
   color: var(--niebla);
+}
+
+/* El pie de foto es lo último del primer pliegue en el teléfono, justo donde
+   está el botón flotante. Se le reserva la esquina para que el texto corte
+   antes y no quede nada debajo del botón. */
+@media (max-width: 899px) {
+  .hero__pie {
+    padding-inline-end: 58px;
+  }
 }
 
 @media (min-width: 900px) {
@@ -1327,16 +1345,20 @@ ol {
 
 /* --------------------------------------------------- WhatsApp flotante */
 
+/* 48 px y pegado a la esquina: el blanco de toque sigue sobre el listón de 44
+   y la huella baja de 72x72 a 58x58 contados desde el borde. Lo que el botón
+   alcanza a montarse sobre el contenido se mide y se controla desde ahí: ver
+   .hero__pie y el relleno de .boton--grande en el teléfono. */
 .wasap-flota {
   position: fixed;
-  right: var(--e4);
-  bottom: var(--e4);
+  right: 10px;
+  bottom: 10px;
   z-index: 50;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: #25d366;
   color: #06281a;
