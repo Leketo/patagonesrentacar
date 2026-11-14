@@ -69,7 +69,7 @@ export const fleet: Car[] = [
     transmission: 'Automática',
     price: 78000,
     photo: kiaSorento,
-    photoAlt: 'Kia Sorento 2011 plata, de perfil, con sus siete asientos',
+    photoAlt: 'Kia Sorento 2011 plata, de perfil, en un estacionamiento techado',
     bestFor: 'Siete asientos: grupos y familias con equipaje.',
   },
 ];
