@@ -37,7 +37,7 @@ export const parkRoutes: ParkRoute[] = [
     duration: 'Día completo',
     detail: 'Navegación hacia el glaciar. Coordina horarios y entradas antes de salir.',
     recommended: 'SUV familiar',
-    carSlug: 'renault-duster-2019',
+    carSlug: 'renault-duster-2018',
   },
   {
     slug: 'mirador-cuernos',

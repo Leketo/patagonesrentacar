@@ -15,9 +15,15 @@ export interface Car {
   type: string;
   seats: number;
   transmission: string;
+  /**
+   * Cilindrada, tal como la dio el dueño (ej.: "1.6"). Opcional a propósito:
+   * del resto de la flota no la tenemos, y se deja vacía antes que suponerla.
+   * La ficha muestra la fila "Motor" solo si este dato existe.
+   */
+  engine?: string;
   /** Precio por día, CLP, IVA incluido. */
   price: number;
-  /** Foto procesada a 3:2 (salvo la del Duster, ver nota). */
+  /** Foto procesada a 3:2. */
   photo: ImageMetadata;
   photoAlt: string;
   /** Para qué viaje conviene, en una línea. */
@@ -38,16 +44,26 @@ export const fleet: Car[] = [
     bestFor: 'Parejas o familias pequeñas que recorren la ruta y el parque.',
   },
   {
-    slug: 'renault-duster-2019',
+    // El dueño corrigió los datos el 16-11-2026: es 2018 y es mecánica, no
+    // 2019 automática como figuraba. Cambia el slug, así que la dirección
+    // /flota/renault-duster-2019/ deja de existir.
+    slug: 'renault-duster-2018',
     name: 'Renault Duster',
-    year: 2019,
+    year: 2018,
     type: 'SUV',
     seats: 5,
-    transmission: 'Automática',
+    // Él lo dijo como "caja manual 1.6". En el sitio los cambios manuales se
+    // escriben "Mecánica", como en el Colorado, para no tener dos palabras
+    // para lo mismo.
+    transmission: 'Mecánica',
+    engine: '1.6',
     price: 68000,
     photo: renaultDuster,
-    photoAlt: 'Renault Duster 2019 blanco, estacionado al borde de un camino',
-    // Dejó de ser "el más reciente de la flota" cuando entró el Colorado 2022.
+    photoAlt:
+      'Renault Duster 2018 blanco, de tres cuartos, al borde de un camino de ripio con el sol bajo',
+    // Dejó de ser "el más reciente de la flota" cuando entró el Colorado 2022,
+    // pero sigue siendo la SUV más nueva: el Colorado es camioneta y las otras
+    // tres SUV son 2017, 2016 y 2011.
     bestFor: 'La SUV más nueva de la flota, para cinco pasajeros.',
   },
   {
@@ -71,7 +87,8 @@ export const fleet: Car[] = [
     type: 'SUV',
     seats: 7,
     transmission: 'Automática',
-    price: 78000,
+    // Subió de $78.000 a $85.000 el 16-11-2026, por encargo del dueño.
+    price: 85000,
     photo: kiaSorento,
     photoAlt: 'Kia Sorento 2011 plata, de perfil, en un estacionamiento techado',
     bestFor: 'Siete asientos: grupos y familias con equipaje.',

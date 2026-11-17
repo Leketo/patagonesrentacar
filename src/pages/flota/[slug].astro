@@ -117,6 +117,9 @@ const schema = [
             <div><dt>Tipo</dt><dd>{car.type}</dd></div>
             <div><dt>Pasajeros</dt><dd>{car.seats}</dd></div>
             <div><dt>Transmisión</dt><dd>{car.transmission}</dd></div>
+            <!-- Solo los autos de los que el dueño dio la cilindrada. Antes de
+                 inventarla, la fila no aparece. -->
+            {car.engine && <div><dt>Motor</dt><dd>{car.engine}</dd></div>}
             <div><dt>Año</dt><dd>{car.year}</dd></div>
           </dl>
 

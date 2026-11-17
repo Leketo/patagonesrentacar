@@ -69,6 +69,22 @@ const trabajos = [
     nota: 'Colorado de tres cuartos. 3:2 cerrado sobre el auto, sin la camioneta roja del fondo.',
     encuadre: { x: 200, y: 160, ancho: 1080, alto: 720 },
   },
+  // El Duster llego con tres fotos nuevas el 16-11-2026, todas de 1600x716, y
+  // con ellas reemplaza a la vieja de 300x168. Se publica la de las 21.30.29
+  // porque es la unica en la que el auto entra ENTERO en un 3:2 (1074x716 es
+  // el recorte mas ancho posible a esa altura): en la 21.30.28 el auto cruza
+  // casi los 1600 px y cualquier 3:2 le corta la cola, y en la 21.30.29 (1)
+  // la cola queda fuera por unos 160 px. Ademas es de tres cuartos delanteros,
+  // el mismo encuadre del resto de la flota. Las otras dos se quedan en ../img
+  // sin copiarse al repo. No se ve ninguna persona; la patente se lee entera,
+  // asi que va pixelada.
+  {
+    origen: 'WhatsApp Image 2026-11-16 at 21.30.29.jpeg',
+    destino: 'flota/renault-duster.jpg',
+    nota: 'Duster de tres cuartos, al sol bajo. 3:2 con el auto entero. Patente pixelada.',
+    encuadre: { x: 140, y: 0, ancho: 1074, alto: 716 },
+    tapar: [{ x: 68, y: 534, ancho: 160, alto: 114 }],
+  },
   {
     origen: 'WhatsApp Image 2026-11-13 at 14.12.48.jpeg',
     destino: 'flota/kia-sorento.jpg',
@@ -97,22 +113,17 @@ const yaEnRepo = [
     destino: 'flota/suzuki-grand-nomade.jpg',
     nota: 'Se recorta gravilla de abajo, no cielo de arriba: el techo llega al borde. Patente pixelada.',
     encuadre: { x: 0, y: 0, ancho: 640, alto: 427 },
-    // Era la unica patente legible de la flota: en el Subaru no hay patente
-    // delantera, y en el Duster y la panoramica vienen tapadas desde el
-    // original. El original de ../img y el de src/fotos-originales/ no se
-    // tocan: lo que se pixela es la copia publicada.
+    // Fue la unica patente que hubo que tapar hasta que llego la foto nueva
+    // del Duster, que tambien trae la suya legible. En el Subaru no hay
+    // patente delantera y en la panoramica viene tapada desde el original. El
+    // original de ../img y el de src/fotos-originales/ no se tocan: lo que se
+    // pixela es la copia publicada.
     tapar: [{ x: 93, y: 203, ancho: 70, alto: 52 }],
   },
-  {
-    origen: path.join(raiz, 'src', 'fotos-originales', 'renault-duster.jpg'),
-    destino: 'flota/renault-duster.jpg',
-    // La foto mide 300x168 y es la peor de todas. Igual se encuadra a 3:2
-    // como las demas, porque el PO pidio que se vean parejas: dejarla con
-    // franjas la delataba al lado de las demas. Queda en 252 px de ancho,
-    // que en la tarjeta (288 px) se amplia 1.14x y aguanta.
-    nota: 'La mas chica de todas. Se encuadra 3:2 igual, para que la tarjeta no desentone.',
-    encuadre: { x: 20, y: 0, ancho: 252, alto: 168 },
-  },
+  // Aqui estaba el Duster, que se armaba con una foto de 300x168 (la peor de
+  // todas, 252 px de ancho ya encuadrada). El dueno mando fotos propias y de
+  // buen tamano, asi que ahora sale de ../img como las demas: su entrada esta
+  // mas arriba. El original chico se borro del repo; queda en el historial.
 ];
 
 /**
