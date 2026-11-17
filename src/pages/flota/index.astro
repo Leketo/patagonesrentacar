@@ -5,7 +5,7 @@ import Condiciones from '../../components/Condiciones.astro';
 import Cierre from '../../components/Cierre.astro';
 import { fleet, minPrice } from '../../data/fleet';
 import { site } from '../../data/site';
-import { clp, enLetras } from '../../lib/format';
+import { clp, conMayuscula, enLetras } from '../../lib/format';
 
 // La lista sale de los datos: si entra un auto, aparece aquí solo.
 const nombres = fleet.map((c) => c.name).join(', ');
@@ -15,7 +15,9 @@ const nombres = fleet.map((c) => c.name).join(', ');
   description={`${nombres}. Desde ${clp(minPrice)} por día con IVA, seguro y kilometraje libre.`}
 >
   <div class="contenedor encabezado-pagina">
-    <h1 class="titular titular--pagina">{enLetras(fleet.length)} autos listos para la ruta</h1>
+    <h1 class="titular titular--pagina">
+      {conMayuscula(enLetras(fleet.length))} autos listos para la ruta
+    </h1>
     <p class="bajada">
       Con seguro y kilometraje libre, y el estanque lleno al retirar. Elige por precio,
       por asientos o por la ruta que vas a hacer.

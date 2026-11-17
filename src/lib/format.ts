@@ -20,6 +20,22 @@ export function enLetras(n: number): string {
   return NUMEROS[n] ?? String(n);
 }
 
+/** "cinco" -> "Cinco". Para cuando el número en letras abre una frase. */
+export function conMayuscula(texto: string): string {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
+/**
+ * El tipo de auto metido dentro de una frase: "Camioneta 4x4" -> "camioneta
+ * 4x4". Las siglas se quedan como están, porque "SUV" en minúscula no se
+ * escribe: por eso se mira la primera palabra y no la primera letra.
+ */
+export function tipoEnFrase(tipo: string): string {
+  const [primera, ...resto] = tipo.split(' ');
+  if (primera === primera.toUpperCase()) return tipo;
+  return [primera.toLowerCase(), ...resto].join(' ');
+}
+
 /** Enlace de WhatsApp con mensaje prellenado. */
 export function waLink(text: string = site.waDefault): string {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
