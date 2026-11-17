@@ -59,15 +59,17 @@ El turista quiere saber en segundos: **qué auto, cuánto cuesta, qué incluye y
 | Auto | Tipo | Pasajeros | Transmisión | Precio/día (IVA incl.) |
 |---|---|---|---|---|
 | Subaru XV 2016 | SUV | 5 | Automática | $62.000 |
-| Renault Duster 2019 | SUV | 5 | Automática | $68.000 |
+| Renault Duster 2018 | SUV | 5 | Mecánica, motor 1.6 | $68.000 |
 | Suzuki Grand Nomade 2017 | SUV 4x4 | 5 | Automática | $70.000 |
-| Kia Sorento 2011 | SUV | 7 | Automática | $78.000 |
+| Kia Sorento 2011 | SUV | 7 | Automática | $85.000 |
 | Chevrolet Colorado 2022 | Camioneta 4x4 doble cabina | 5 | Mecánica | $128.000 |
 
-- El Colorado se agregó el 13-11-2026 con datos confirmados por el dueño. Los textos del sitio cuentan los autos desde `fleet.ts`; no escribir "cuatro autos" ni "todas automáticas" a mano.
-- La tarifa se ajusta desde dos días de arriendo.
+- El Colorado se agregó el 13-11-2026 con datos confirmados por el dueño. El 16-11-2026 el dueño subió el Sorento de $78.000 a $85.000 y corrigió el Duster (2018, mecánica 1.6; antes figuraba 2019 automática). La ficha vieja `/flota/renault-duster-2019/` redirige a la nueva desde `astro.config.mjs`.
+- Los textos del sitio cuentan los autos y sus transmisiones desde `fleet.ts`; no escribir "cuatro autos" ni "todas automáticas" a mano. La cilindrada se muestra solo en los autos que la tienen en los datos.
+- La tarifa se ajusta desde dos días de arriendo. En qué sentido (baja o sube por día) está pendiente del dueño; mientras tanto el sitio no promete nada más que "te confirmamos el precio final por WhatsApp".
 - Edad mínima 21 años. Seguro incluido. Kilometraje libre. Estanque lleno. Entrega en aeropuerto u hotel. Conductores adicionales. Asistencia en ruta 24/7.
-- Rutas (según el dueño): Base Torres, Circuito W, Glaciar Grey, Mirador Cuernos y Salto Grande. El parque está a poco más de dos horas.
+- Rutas y sus detalles (Laguna Amarga, Pudeto, duraciones, "5 días y 4 noches", estacionamiento durante el trekking, "poco más de dos horas" al parque): salen del sitio Site123 del propio dueño, así que cuentan como confirmados. Pendiente solo el punto de salida de la navegación al Glaciar Grey.
+- Requisitos documentales (cédula o pasaporte vigente, licencia vigente a nombre de quien retira): son los habituales del rubro, pero el dueño aún no los confirmó. "Revisión previa al viaje" no está confirmado y se quita del sitio.
 - **Pendientes** (se muestran como "Consúltanos" hasta que lleguen): depósito, cruce a Argentina, cancelación, correo.
 
 ### Reglas de contenido
@@ -78,7 +80,10 @@ El turista quiere saber en segundos: **qué auto, cuánto cuesta, qué incluye y
 ## 4. Pendientes del dueño
 
 - Depósito, cruce a Argentina, cancelación.
-- Fotos nuevas del Duster (hoy muy baja resolución) y del Sorento (la actual es de un estacionamiento techado). Ideal: todas en la zona, más interior y maletero. Sin personas en las fotos y con la patente tapada.
+- Cómo se ajusta la tarifa desde dos días (baja por día, sube, depende).
+- Si se permite retirar y devolver el mismo día, y cómo se cobra. Hoy el formulario exige devolución al día siguiente o después.
+- Confirmar requisitos documentales (cédula o pasaporte, licencia a nombre de quien retira) y si hay revisión del auto antes de entregarlo.
+- Fotos nuevas del Sorento (la actual es de un estacionamiento techado) y del Suzuki (la actual es de 640 px y se ve blanda en el teléfono); el Duster ya tiene foto propia desde el 16-11. Ideal: todas en la zona, de al menos 1200 px de ancho, más interior y maletero. Sin personas y con la patente tapada.
 - Foto de un auto con el paisaje para la portada.
 - Logo y correo.
 - Verificar el punto de salida de la navegación al Glaciar Grey.
