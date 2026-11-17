@@ -53,8 +53,9 @@ export function columnas(n: number, maximo: number): number {
 
 /**
  * Anchos para astro:assets, recortados al ancho real de la foto.
- * Sin esto Astro amplía las fotos chicas (la del Duster mide 300 px) y las
- * deja borrosas. Nunca se pide más de lo que la foto tiene.
+ * Sin esto Astro amplía las fotos chicas y las deja borrosas. Nunca se pide
+ * más de lo que la foto tiene. Desde que el Duster estrenó foto grande, la más
+ * chica de la flota es la del Suzuki (640 px) y la del Sorento (650 px).
  */
 export function widthsUpTo(photoWidth: number, wanted: number[] = [420, 760, 1100]): number[] {
   const ok = wanted.filter((w) => w <= photoWidth);

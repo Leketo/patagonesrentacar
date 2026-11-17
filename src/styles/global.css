@@ -764,10 +764,10 @@ ol {
   }
 }
 
-/* Son cuatro datos: tipo, pasajeros, transmisión y año. Las columnas van fijas
-   y no en auto-fit, porque 4 en 2 o en 4 columnas siempre llenan las filas;
-   con auto-fit caían de a 3 y dejaban una celda vacía con cara de dato que
-   falta. */
+/* Cuatro datos fijos —tipo, pasajeros, transmisión y año— y el motor cuando el
+   dueño lo dio. Las columnas van fijas y no en auto-fit, porque 4 en 2 o en 4
+   columnas siempre llenan las filas; con auto-fit caían de a 3 y dejaban una
+   celda vacía con cara de dato que falta. */
 .especificaciones {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -781,6 +781,13 @@ ol {
 .especificaciones > div {
   padding: var(--e3) var(--e4);
   background: var(--noche);
+}
+
+/* Cuando los datos son impares (el auto que trae motor son cinco), el último
+   ocupa la fila entera. Si no, queda solo con el hueco al lado, que es justo
+   lo que se quería evitar. Sirve igual en dos y en cuatro columnas. */
+.especificaciones > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 .especificaciones dt {
