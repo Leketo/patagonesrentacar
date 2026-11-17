@@ -265,6 +265,19 @@ ol {
   text-decoration-color: var(--glaciar);
   text-underline-offset: 3px;
   text-decoration-thickness: 2px;
+  position: relative;
+}
+
+/* Un enlace de texto mide 24 px de alto: lo que se pulsa se estira a 44 con
+   una capa invisible, y no con padding. El padding en un enlace dentro de un
+   párrafo mueve la línea; display:inline-block lo arregla pero impide que el
+   texto largo corte de línea, y a 390 px eso desborda. La capa no toca el
+   maquetado ni el corte de línea. */
+.enlace::after {
+  content: '';
+  position: absolute;
+  inset-block: -10px;
+  inset-inline: 0;
 }
 
 .enlace:hover {
@@ -419,10 +432,14 @@ ol {
   list-style: none;
 }
 
+/* 44 px también de ancho: "Flota" mide 29 y era el blanco más chico de la
+   cabecera. El centrado deja el texto donde estaba. */
 .menu a {
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  min-width: 44px;
   text-decoration: none;
   white-space: nowrap;
   border-bottom: 2px solid transparent;
@@ -686,7 +703,14 @@ ol {
   line-height: 1;
 }
 
+/* El nombre del auto deja una caja de 26 px de alto. Se estira a 44 con
+   relleno y margen negativo del mismo tamaño: el blanco de toque crece y la
+   tarjeta no se mueve ni un píxel. Va en inline-block y no en bloque para que
+   lo que se pulsa sea el nombre y no toda la fila. */
 .auto__nombre a {
+  display: inline-block;
+  padding-block: 9px;
+  margin-block: -9px;
   text-decoration: none;
 }
 
@@ -849,7 +873,9 @@ ol {
 .migas span {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
+  min-width: 44px;
 }
 
 .migas ol {
