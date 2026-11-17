@@ -26,12 +26,23 @@ import portada from '../assets/portada/puerto-natales-subaru.jpg';
         </p>
       </div>
 
+      {/* La foto de portada es el elemento más grande del primer pantallazo, así
+          que de ella depende el LCP. Los dos números están medidos en el
+          preview, no estimados: 370 px de 390 (94,9vw) y 879 de 899 en
+          teléfono y tableta, y entre 43 y 49vw de 900 para arriba (428 px a
+          900, 692 a 1440, 820 a 1900). Decía 100vw y 58vw, y con eso el
+          navegador pedía siempre la copia más grande.
+          La escalera de anchos llega hasta 1284, que es lo que mide el
+          original: no hay una copia mayor que ofrecer. Los dos peldaños
+          nuevos son los que se usan de verdad en un teléfono: 1120 para
+          390 px con tres píxeles por punto y 800 para el mismo ancho con
+          dos. */}
       <figure class="hero__foto">
         <Image
           src={portada}
           alt="Subaru XV rojo de la flota, estacionado junto al letrero de Puerto Natales, con el fiordo y la cordillera nevada al fondo"
-          widths={[640, 960, 1284]}
-          sizes="(min-width: 900px) 58vw, 100vw"
+          widths={[640, 800, 960, 1120, 1284]}
+          sizes="(min-width: 900px) 50vw, 95vw"
           loading="eager"
           fetchpriority="high"
         />
