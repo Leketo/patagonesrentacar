@@ -103,7 +103,12 @@ const datos = [negocio, ...schema];
     <meta name="description" content={description} />
     {canonica && <link rel="canonical" href={urlCanonica} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
+    {/* El .ico va primero y el SVG después: el navegador que entiende SVG se
+        queda con el segundo, y el que no, con el primero. Los tres los genera
+        scripts/generar-iconos.mjs desde el mismo favicon.svg. */}
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0E1A22" />
     <link rel="preload" href={condensadaWoff2} as="font" type="font/woff2" crossorigin />
 
