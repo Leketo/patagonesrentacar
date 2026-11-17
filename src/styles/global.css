@@ -703,14 +703,16 @@ ol {
   line-height: 1;
 }
 
-/* El nombre del auto deja una caja de 26 px de alto. Se estira a 44 con
-   relleno y margen negativo del mismo tamaño: el blanco de toque crece y la
-   tarjeta no se mueve ni un píxel. Va en inline-block y no en bloque para que
-   lo que se pulsa sea el nombre y no toda la fila. */
+/* El nombre del auto deja una caja de 25,6 px de alto (1.6rem con interlínea
+   1). Se estira a 45,6 con relleno y margen negativo del mismo tamaño: el
+   blanco de toque crece y la tarjeta no se mueve ni un píxel. Con 9 px
+   quedaba en 43,6: pasa los 44 solo si se redondea, y redondear no es
+   cumplir. Va en inline-block y no en bloque para que lo que se pulsa sea el
+   nombre y no toda la fila. */
 .auto__nombre a {
   display: inline-block;
-  padding-block: 9px;
-  margin-block: -9px;
+  padding-block: 10px;
+  margin-block: -10px;
   text-decoration: none;
 }
 
