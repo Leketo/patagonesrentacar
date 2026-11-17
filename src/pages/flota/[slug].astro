@@ -150,7 +150,9 @@ const schema = [
     <div class="contenedor">
       <div class="cabeza-seccion">
         <h2 id="t-consulta" class="titular titular--seccion">Consulta por este auto</h2>
-        <p>Ya viene elegido. Pon tus fechas y se abre WhatsApp con el mensaje escrito.</p>
+        <p class="solo-con-js">
+          Ya viene elegido. Pon tus fechas y se abre WhatsApp con el mensaje escrito.
+        </p>
       </div>
       <Consulta selected={car.slug} id={`ficha-${car.slug}`} />
     </div>

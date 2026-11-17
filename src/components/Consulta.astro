@@ -1,7 +1,7 @@
 ---
 // Consulta de disponibilidad: arma el mensaje y abre WhatsApp.
 // No guarda ni envía datos a ningún servidor, y no usa cookies.
-import { fleet } from '../data/fleet';
+import { fleet, findCar } from '../data/fleet';
 import { site } from '../data/site';
 import { clp, waLink } from '../lib/format';
 
@@ -16,8 +16,22 @@ interface Props {
 const { selected, papel = false, id = 'consulta' } = Astro.props;
 
 // Sin JavaScript se da vuelta el bloque: desaparece el formulario y aparece el
-// enlace a WhatsApp, que sí funciona.
-const sinJs = '<style>.consulta__js{display:none}.consulta__sin-js{display:flex}</style>';
+// enlace a WhatsApp, que sí funciona. `.solo-con-js` esconde además las frases
+// que prometen lo que el formulario haría ("pon tus fechas y se abre WhatsApp
+// con el mensaje escrito"): sin scripts esa promesa es falsa. La regla es de
+// toda la página, así que sirve para cualquier texto fuera de este componente,
+// pero vive aquí: si una página usa `.solo-con-js` sin incluir <Consulta />,
+// no hay quien la esconda.
+const sinJs =
+  '<style>.consulta__js{display:none}.consulta__sin-js{display:flex}.solo-con-js{display:none}</style>';
+
+// El respaldo sin JavaScript de una ficha ya sabe de qué auto se trata: el
+// mensaje lo nombra con su precio, igual que lo haría el formulario. En la
+// portada y en contacto no hay auto elegido, así que va el mensaje general.
+const auto = selected ? findCar(selected) : undefined;
+const mensajeRespaldo = auto
+  ? `Hola, vengo de patagonesrentacar.cl y quiero consultar por el arriendo del ${auto.name} ${auto.year} (${clp(auto.price)} por día).`
+  : site.waDefault;
 ---
 <form class:list={['consulta', papel && 'consulta--papel']} data-wasap={site.whatsapp} novalidate>
   <!-- Todo lo que depende de JavaScript vive dentro de .consulta__js y se
@@ -97,8 +111,9 @@ const sinJs = '<style>.consulta__js{display:none}.consulta__sin-js{display:flex}
       Para armar el mensaje con tus fechas hace falta JavaScript, y lo tienes
       desactivado. Vamos directo al chat:
     </p>
-    <a class="boton boton--luz boton--grande" href={waLink()} rel="noopener">
+    <a class="boton boton--luz boton--grande" href={waLink(mensajeRespaldo)} rel="noopener">
       Consultar por WhatsApp
+      {auto && <span class="solo-lectores"> el {auto.name} {auto.year}</span>}
     </a>
     <p class="consulta__aviso">
       Cuéntanos qué auto quieres y tus fechas. Te respondemos con la disponibilidad
