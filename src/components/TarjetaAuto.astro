@@ -14,6 +14,15 @@ const Nombre = nivel;
 const href = `/flota/${car.slug}/`;
 const distintivo = badge(car);
 const rutas = routesForCar(car.slug);
+
+// Los anchos del `sizes` de abajo están medidos en el navegador, no estimados.
+// La reja cambia de columnas según cuántos autos muestre, así que manda el caso
+// más ancho, que es la flota y la portada (cinco autos, tres columnas):
+//   390 px -> 329   |  800 px -> 340   |  1200 px -> 343   |  1440 px -> 387
+// Desde 1312 px el contenedor topa en su ancho máximo (1200 + 2 × 56 de margen)
+// y la tarjeta se queda fija en 388 px. Decir 280 px, como decía antes, hacía
+// que el navegador bajara la foto de 420 px para una caja de 387: borrosa en
+// cuanto la pantalla tenía más de un píxel por punto.
 ---
 <article class="auto">
   <div class="auto__marco">
@@ -21,7 +30,7 @@ const rutas = routesForCar(car.slug);
       src={car.photo}
       alt={car.photoAlt}
       widths={widthsUpTo(car.photo.width, [420, 760])}
-      sizes="(min-width: 1100px) 280px, (min-width: 700px) 45vw, 92vw"
+      sizes="(min-width: 1312px) 388px, (min-width: 1000px) 29vw, (min-width: 700px) 43vw, 87vw"
       loading="lazy"
       decoding="async"
     />
