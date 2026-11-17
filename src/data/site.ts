@@ -57,5 +57,5 @@ export const services = [
   'Asistencia en ruta 24/7',
   'Entrega en el aeropuerto o en tu hotel',
   'Conductores adicionales',
-  'Estanque lleno y revisión previa al viaje',
+  'Estanque lleno al retirar',
 ];
