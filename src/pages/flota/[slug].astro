@@ -62,10 +62,10 @@ const schema = [
   },
 ];
 ---
-<!-- El título se cierra con " | Patagones Rent a Car", que son 23 caracteres:
-     al nombre del auto le quedan 37 para no pasar de 60, que es donde corta
-     Google. El más largo de la flota, "Arriendo de Suzuki Grand Nomade 2017",
-     mide 36. Si entra un auto con nombre más largo, hay que acortar aquí. -->
+{/* El título se cierra con " | Patagones Rent a Car", que son 23 caracteres:
+    al nombre del auto le quedan 37 para no pasar de 60, que es donde corta
+    Google. El más largo de la flota, "Arriendo de Suzuki Grand Nomade 2017",
+    mide 36. Si entra un auto con nombre más largo, hay que acortar aquí. */}
 <Base
   title={`Arriendo de ${car.name} ${car.year}`}
   description={`${car.name} ${car.year}, ${tipoEnFrase(car.type)} de ${car.seats} pasajeros. ${clp(car.price)} por día con IVA, seguro y kilometraje libre. Entrega en el aeropuerto o en tu hotel.`}
@@ -75,8 +75,8 @@ const schema = [
 >
   <section class="seccion">
     <div class="contenedor">
-      <!-- Lista de verdad, y los separadores con aria-hidden: si no, el lector
-           de pantalla lee "mayor que" entre cada enlace. -->
+      {/* Lista de verdad, y los separadores con aria-hidden: si no, el lector
+          de pantalla lee "mayor que" entre cada enlace. */}
       <nav class="migas" aria-label="Migas de pan">
         <ol>
           <li><a href="/">Inicio</a></li>
@@ -117,8 +117,8 @@ const schema = [
             <div><dt>Tipo</dt><dd>{car.type}</dd></div>
             <div><dt>Pasajeros</dt><dd>{car.seats}</dd></div>
             <div><dt>Transmisión</dt><dd>{car.transmission}</dd></div>
-            <!-- Solo los autos de los que el dueño dio la cilindrada. Antes de
-                 inventarla, la fila no aparece. -->
+            {/* Solo los autos de los que el dueño dio la cilindrada. Antes de
+                inventarla, la fila no aparece. */}
             {car.engine && <div><dt>Motor</dt><dd>{car.engine}</dd></div>}
             <div><dt>Año</dt><dd>{car.year}</dd></div>
           </dl>

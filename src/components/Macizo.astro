@@ -44,16 +44,16 @@ const alba = `${id}-alba`;
       <stop offset="1" stop-color="#3f5260" />
     </linearGradient>
 
-    <!-- La luz se apaga hacia abajo: el sol da primero en las cumbres. -->
+    {/* La luz se apaga hacia abajo: el sol da primero en las cumbres. */}
     <linearGradient id={luz} gradientUnits="userSpaceOnUse" x1="0" y1="130" x2="0" y2="300">
       <stop offset="0" stop-color="#ffb272" />
       <stop offset="0.35" stop-color="#f08a3c" />
-      <!-- Se apaga en transparente y no en un marrón: si no, las caras bajas
-           quedan color tierra y la luz parece pintura. -->
+      {/* Se apaga en transparente y no en un marrón: si no, las caras bajas
+          quedan color tierra y la luz parece pintura. */}
       <stop offset="1" stop-color="#f08a3c" stop-opacity="0" />
     </linearGradient>
 
-    <!-- El resplandor del amanecer, pegado al horizonte detrás de las Torres. -->
+    {/* El resplandor del amanecer, pegado al horizonte detrás de las Torres. */}
     <radialGradient id={alba} gradientUnits="userSpaceOnUse" cx="883" cy="268" r="215">
       <stop offset="0" stop-color="#f6a460" stop-opacity="0.22" />
       <stop offset="1" stop-color="#f6a460" stop-opacity="0" />
@@ -63,17 +63,17 @@ const alba = `${id}-alba`;
   <rect width="1200" height="420" fill={`url(#${cielo})`} />
   <rect width="1200" height="420" fill={`url(#${alba})`} />
 
-  <!-- Aquí iban dos nubes lenticulares. Se quitaron: a este tamaño leían como
-       platillos grises delante del macizo. La ilustración se juega en la
-       silueta y en la luz, y todo lo demás estorba. -->
+  {/* Aquí iban dos nubes lenticulares. Se quitaron: a este tamaño leían como
+      platillos grises delante del macizo. La ilustración se juega en la
+      silueta y en la luz, y todo lo demás estorba. */}
 
-  <!-- Cordón lejano, detrás del macizo -->
+  {/* Cordón lejano, detrás del macizo */}
   <polygon
     fill="#1a2c37"
     points="0,420 0,352 120,328 240,344 360,320 480,338 600,312 720,332 840,308 960,330 1080,316 1200,336 1200,420"
   />
 
-  <!-- El macizo, una sola silueta continua -->
+  {/* El macizo, una sola silueta continua */}
   <polygon
     fill="#2c4555"
     points="0,420 0,382 76,370 150,350 222,318
@@ -91,34 +91,34 @@ const alba = `${id}-alba`;
             1200,420"
   />
 
-  <!-- Nieve del Paine Grande, en la cara oeste que mira al glaciar Grey. Muy
-       tenue: más contraste y parecía otra cumbre en vez de nieve. -->
+  {/* Nieve del Paine Grande, en la cara oeste que mira al glaciar Grey. Muy
+      tenue: más contraste y parecía otra cumbre en vez de nieve. */}
   <polygon points="328,142 302,158 278,196 300,204 326,160" fill="#d3dee1" opacity="0.14" />
 
-  <!-- Cúpula de roca oscura de los Cuernos: el detalle que los hace Cuernos.
-       Es una franja baja y ancha, no un triángulo: así lee como cúpula
-       apoyada sobre el granito claro y no como un pico negro aparte. -->
+  {/* Cúpula de roca oscura de los Cuernos: el detalle que los hace Cuernos.
+      Es una franja baja y ancha, no un triángulo: así lee como cúpula
+      apoyada sobre el granito claro y no como un pico negro aparte. */}
   <g fill="#1b2c36">
     <polygon points="514,224 530,196 548,230 534,238 522,232" />
     <polygon points="616,206 638,152 662,202 642,212 628,210" />
     <polygon points="714,256 730,224 748,260 734,262 722,258" />
   </g>
 
-  <!-- LA LUZ, solo en las caras que miran al este -->
+  {/* LA LUZ, solo en las caras que miran al este */}
   <g fill={`url(#${luz})`}>
-    <!-- Paine Grande: el más lejano al sol, apenas rozado -->
+    {/* Paine Grande: el más lejano al sol, apenas rozado */}
     <polygon points="358,141 384,162 406,206 388,212 364,154" opacity="0.5" />
-    <!-- Cuernos: la luz muere donde empieza la falda -->
+    {/* Cuernos: la luz muere donde empieza la falda */}
     <polygon points="530,196 548,230 558,254 546,258 534,214" opacity="0.78" />
     <polygon points="638,152 662,202 676,240 662,245 644,184" opacity="0.78" />
     <polygon points="730,224 748,260 738,263 727,236" opacity="0.78" />
-    <!-- Las tres Torres: el amanecer les da de lleno -->
+    {/* Las tres Torres: el amanecer les da de lleno */}
     <polygon points="852,206 861,286 855,286 848,220" />
     <polygon points="883,172 893,286 886,286 878,188" />
     <polygon points="913,214 921,286 915,286 908,226" />
   </g>
 
-  <!-- Primer plano: la pampa, para que el macizo se apoye en algo -->
+  {/* Primer plano: la pampa, para que el macizo se apoye en algo */}
   <polygon
     fill="#16242d"
     points="0,420 0,398 160,404 340,394 520,402 700,392 880,400 1060,392 1200,398 1200,420"
